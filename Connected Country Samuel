@@ -1,0 +1,98 @@
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class country{
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf=new BufferedReader(new InputStreamReader(System.in));
+        String[] l1=bf.readLine().split(" ");
+        int n=Integer.parseInt(l1[0]);
+        int k=Integer.parseInt(l1[1]);
+        country prueba=new country(n);
+        for (int i   =0;i<k;i++){
+            String[] l2=bf.readLine().split(" ");
+            int a=Integer.parseInt(l2[0]);
+            int b=Integer.parseInt(l2[1]);
+            prueba.addEdge(a,b);
+            prueba.addEdge(b,a);
+        }
+        int contador=0;
+        int j=0;
+        char[] state=new char[n];
+        Arrays.fill(state,'N');
+        prueba.bfs(0,state);
+
+        for (int i = 0; i < state.length; i++) {
+            if(state[i]=='N'){
+                prueba.bfs(i,state);
+                contador++;
+            }
+        }
+        //System.out.println(state);
+        System.out.println(contador);
+
+    }
+
+    private int n, m;
+    private List<Integer>[] adjList;
+
+    private final int INF = 2147400000;
+
+    public country(int n) {
+        this.n = n;
+        m = 0;
+        adjList = new List[n];
+        for(int i=0; i<n; i++)
+            adjList[i] = new LinkedList<Integer>();
+    }
+
+    public char[] bfs(int s,char[] state) {
+        int resultado=0;
+        state[s] = 'D';
+        Queue<Integer> Q = new LinkedList<Integer>();
+        Q.add(s);
+        while (!Q.isEmpty()) {
+            int u = Q.poll();
+            for(int v : adjList[u])
+                if (state[v] == 'N') {
+                    state[v] = 'D';
+                    Q.add(v);
+                }
+            state[u] = 'E';
+        }
+        return state;
+    }
+
+
+    /*public List<Integer> shortestPath(int s, int t) {
+        int[] pi = bfs(s);
+        if (pi[t] == -1 && t!=s) return null;
+        List<Integer> path = new LinkedList<Integer>();
+        while (t!=-1) {
+            path.add(0, t);
+            t = pi[t];
+        }
+        return path;
+    }*/
+
+    public void addEdge(int a, int b) {
+        adjList[a].add(b);
+        m++;
+    }
+
+    public void removeEdge(int a, int b) {
+        if (!adjList[a].contains(b)) return;
+        adjList[a].remove(b);
+        m--;
+    }
+
+    public String toString() {
+        String s = "";
+        for(int i=0; i<n; i++)
+            s += adjList[i] + "\n";
+        return s;
+    }
+
+}
