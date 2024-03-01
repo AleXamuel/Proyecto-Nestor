@@ -1,0 +1,97 @@
+    import java.io.BufferedReader;
+    import java.io.IOException;
+    import java.io.InputStreamReader;
+    import java.util.List;
+    import java.util.HashMap;
+    import java.util.ArrayList;
+    import java.util.Collections;
+
+    public class Main {
+        static int N;
+        static int contador;
+        static HashMap<String, Integer> indices;
+        static ArrayList<Integer>[] adj;
+        static int[] d, f, low;
+        static int time;
+        static boolean[] ap;
+
+        public static void main(String[] args) throws IOException {
+            int j=1;
+            int k=1;
+            BufferedReader bf= new BufferedReader(new InputStreamReader(System.in));
+            N=Integer.parseInt(bf.readLine());
+            while(true){
+                contador=0;
+                adj=new ArrayList[N];
+                indices=new HashMap<>();
+                for(int i =0;i<N;i++){
+                    String s=bf.readLine();
+                    adj[i]=new ArrayList<>();
+                    indices.put(s,i);
+                }
+                //System.out.println(indices);
+                int m =Integer.parseInt(bf.readLine());
+                for (int i = 0; i <m; i++) {
+                    String[] l=bf.readLine().split(" ");
+                    addEdge(indices.get(l[0]),indices.get(l[1]));
+                }
+                get_articulation_points();
+                while(contador<N)
+                    dfs(contador,-1);
+                List<String> res= new ArrayList<>();
+                for (int i = 0; i < ap.length; i++)
+                    if(ap[i])
+                        for (String clave : indices.keySet()) {
+                            int valor = indices.get(clave);
+                            if (valor == i) {
+                                res.add(clave);
+                                break;
+                            }
+
+                        }
+                if(j!=1)
+                    System.out.println("");
+                String s="City map #"+j+": "+res.size()+" camera(s) found";
+                Collections.sort(res);
+                System.out.println(s);
+                for(String r: res)
+                    System.out.println(r);
+                j++;
+                N=Integer.parseInt(bf.readLine());
+
+                if(N==0)
+                    return;
+            }
+        }
+
+        static void addEdge(int a, int b){
+            adj[a].add(b);
+            adj[b].add(a);
+        }
+        static void dfs(int u, int par) {
+            d[u] = time++;
+            low[u] = d[u];
+            int children = 0;
+            contador++;
+            for(int v:adj[u]) {
+                if (v==par) continue;
+                else if (d[v]>0)
+                    low[u] = Math.min(low[u], d[v]);
+                else {
+                    children++;
+                    dfs(v, u);
+                    low[u] = Math.min(low[u], low[v]);
+                    if (par!=-1 && low[v]>=d[u]) ap[u] = true;
+                }
+            }
+            if (par==-1 && children>1) ap[u] = true;
+        }
+
+        static void get_articulation_points() {
+            d = new int[N];
+            low = new int[N];
+            time = 1;
+            ap = new boolean[N];
+            dfs(0, -1);
+        }
+    }
