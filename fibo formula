@@ -1,0 +1,13 @@
+import math
+def fibonacci_formula(n):
+    if n < 0:
+        raise ValueError("n debe ser un entero no negativo")
+    phi = (1 + math.sqrt(5)) / 2
+    psi = (1 - math.sqrt(5)) / 2
+    a = phi ** (n + 1)
+    b = psi ** (n + 1)
+    return (1 / math.sqrt(5)) * (a - b)
+
+for i in range(100,200):
+    result =int(fibonacci_formula(i))
+    print(f"El {i+1}-ésimo número de Fibonacci es: {result}")
