@@ -1,0 +1,75 @@
+import java.io.*;
+import java.util.*;
+
+public class Dominos {
+	static ArrayList<Integer>[] adj;
+	static int[] d;
+	static int N;
+	static int time;
+	static Stack<Integer> tsort;
+	static boolean visitados[];
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		int test = Integer.parseInt(in.readLine());
+		for (int i = 0; i < test; i++) {
+			StringTokenizer st = new StringTokenizer(in.readLine());
+			N = Integer.parseInt(st.nextToken()) + 1;
+			adj = new ArrayList[N];
+			for (int j = 0; j < N; j++)
+				adj[j] = new ArrayList<>();
+			int m = Integer.parseInt(st.nextToken());
+			for (int j = 0; j < m; j++) {
+				st = new StringTokenizer(in.readLine());
+				int x = Integer.parseInt(st.nextToken());
+				int y = Integer.parseInt(st.nextToken());
+				adj[x].add(y);
+
+			}
+			System.out.println(solve(top_sort()) - 1);
+		}
+
+	}
+
+	static int solve(int[] toposort) {
+		visitados = new boolean[N];
+		int ans = 0;
+		for (int i : toposort)
+			if (!visitados[i]) {
+				ans++;
+				dfs_prima(i);
+			}
+		return ans;
+	}
+
+	static void dfs_prima(int u) {
+		visitados[u] = true;
+		for (int v : adj[u])
+			if (!visitados[v])
+				dfs_prima(v);
+	}
+
+	static void dfs(int u) {
+		d[u] = time++;
+		for (int v : adj[u]) {
+			if (d[v] != 0)
+				continue;
+			dfs(v);
+		}
+		tsort.add(u);
+	}
+
+	static int[] top_sort() {
+		d = new int[N];
+		tsort = new Stack<>();
+		time = 1;
+		for (int u = 0; u < N; u++)
+			if (d[u] == 0)
+				dfs(u);
+		int[] tsort_arr = new int[N];
+		for (int i = 0; i < N; i++)
+			tsort_arr[i] = tsort.pop();
+		return tsort_arr;
+	}
+
+}
