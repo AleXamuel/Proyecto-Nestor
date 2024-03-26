@@ -1,0 +1,74 @@
+import java.util.*;
+import java.io.*;
+
+public class SubmergingIslands {
+	static int n;
+	static ArrayList<Integer>[] adj;
+	static int[] d, f, low;
+	static int time;
+	static boolean[] ap;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		while (true) {
+			StringTokenizer st = new StringTokenizer(in.readLine());
+			n = Integer.parseInt(st.nextToken());
+			int m = Integer.parseInt(st.nextToken());
+			if (n == 0 && m == 0)
+				break;
+			adj = new ArrayList[n];
+			for (int i = 0; i < n; i++)
+				adj[i] = new ArrayList<>();
+			for (int i = 0; i < m; i++) {
+				st = new StringTokenizer(in.readLine());
+				int a = Integer.parseInt(st.nextToken());
+				int b = Integer.parseInt(st.nextToken());
+				a--;
+				b--;
+				adj[a].add(b);
+				adj[b].add(a);
+			}
+			System.out.println(solve());
+		}
+	}
+
+	static int solve() {
+		get_articulation_points();
+		int c = 0;
+		for (boolean i : ap)
+			if (i)
+				c++;
+		return c;
+
+	}
+
+	static void dfs(int u, int par) {
+		d[u] = time++;
+		low[u] = d[u];
+		int children = 0;
+		for (int v : adj[u]) {
+			if (v == par)
+				continue;
+			else if (d[v] > 0)
+				low[u] = Math.min(low[u], d[v]);
+			else {
+				children++;
+				dfs(v, u);
+				low[u] = Math.min(low[u], low[v]);
+				if (par != -1 && low[v] >= d[u])
+					ap[u] = true;
+			}
+		}
+		if (par == -1 && children > 1)
+			ap[u] = true;
+	}
+
+	static void get_articulation_points() {
+		d = new int[n];
+		low = new int[n];
+		time = 1;
+		ap = new boolean[n];
+		dfs(0, -1);
+	}
+
+}
