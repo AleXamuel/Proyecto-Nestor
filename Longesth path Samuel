@@ -1,0 +1,81 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Arbol {
+    static int[] d,t;
+    static int N;
+    static int time;
+    static ArrayList<Integer>[] adjList;
+    static char[] state;
+    static Stack<Integer> tsort;
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf=new BufferedReader(new InputStreamReader(System.in));
+        N=Integer.parseInt(bf.readLine());
+        adjList=new ArrayList[N];
+        d=new int[N];
+        state=new char[N];
+        for (int i = 0; i < N; i++) {
+            adjList[i]=new ArrayList<>();
+        }
+        for (int i = 0; i < N-1; i++) {
+            String[] l1=bf.readLine().split(" ");
+            int a=Integer.parseInt(l1[0]);
+            int b=Integer.parseInt(l1[1]);
+            addEdge(a-1,b-1);
+        }
+        bfs(0);
+        int k=max(d);
+        bfs(k);
+        int res=max2(d);
+        System.out.println(res);
+        
+    }
+    static int max(int[] arr){
+        int max=arr[0];
+        int j=0;
+        for (int i = 0; i < arr.length; i++)
+            if(arr[i]>max){
+                max=arr[i];
+                j=i;
+            }
+        return j;
+    }
+
+    static int max2(int[] arr){
+        int max=arr[0];
+        int j=0;
+        for (int i = 0; i < arr.length; i++)
+            if(arr[i]>max){
+
+                max=arr[i];
+                j=i;
+            }
+        return max;
+    }
+    static void bfs(int s) {
+        Arrays.fill(state,'N');
+        Arrays.fill(d,-1);
+        d[s]=0;
+        state[s] = 'D';
+        Queue<Integer> Q = new LinkedList<>();
+        Q.add(s);
+        while (!Q.isEmpty()) {
+            int u = Q.poll();
+            for(int v : adjList[u])
+                if (state[v] == 'N') {
+                    state[v] = 'D';
+                    d[v]=d[u]+1;
+                    Q.add(v);
+                }
+            state[u] = 'E';
+        }
+    }
+
+
+    static void addEdge(int a, int b) {
+        adjList[a].add(b);
+        adjList[b].add(a);
+    }
+}
