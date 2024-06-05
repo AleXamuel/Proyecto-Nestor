@@ -1,0 +1,92 @@
+import java.util.*;
+import java.io.*;
+
+public class Dijkstra {
+    static int n;
+    static ArrayList<Edge>[] adj;
+    static boolean[] state;
+    static int[] pi;
+    static int[] d;
+
+    public static void main(String[] args) throws  Exception{
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(in.readLine());
+        for (int i=0; i<t; i++ ){
+            StringTokenizer st = new StringTokenizer(in.readLine());
+            n = Integer.parseInt(st.nextToken());
+            adj = new ArrayList[n];
+            int m = Integer.parseInt(st.nextToken());
+            int S = Integer.parseInt(st.nextToken());
+            int T = Integer.parseInt(st.nextToken());
+            for (int j=0; j<n; j++ )
+                adj[j] = new ArrayList<>();
+            for (int k = 0; k < m; k++){
+                st = new StringTokenizer(in.readLine());
+                int a = Integer.parseInt(st.nextToken());
+                int b = Integer.parseInt(st.nextToken());
+                int w = Integer.parseInt(st.nextToken());
+                adj[a].add(new Edge(b,w));
+                adj[b].add(new Edge(a,w));
+            }
+            Dijkstra(S);
+            if (!state[T]) System.out.println("Case #" +(i+1)+": "+"unreachable");
+            else{
+                System.out.println("Case #" + (i+1) +": " + d[T]);
+            }
+
+        }
+    }
+    static void Dijkstra(int s){
+        pi = new int[n];
+        d = new int[n];
+        state = new boolean[n];
+        pi[s] = -1;
+        Arrays.fill(d,Integer.MAX_VALUE);
+        d[s] = 0;
+        TreeSet<Edge> Q = new TreeSet<>();
+        Q.add(new Edge(s,0));
+        while(!Q.isEmpty()){
+            Edge e = Q.pollFirst();
+            int u = e.vertex;
+            if (!state[u]){
+                for (Edge ee : adj[u]){
+                    int v = ee.vertex;
+                    if (!state[v]){
+                        int w = ee.weight;
+                        if (d[u] + w < d[v]) {
+                            d[v] = d[u] + w;
+                            pi[v] = u;
+                            Q.add(new Edge(v,d[v]));
+                        }
+                    }
+                }
+                state[u] = true;
+            }
+
+        }
+    }
+    public static class Edge implements Comparable<Edge>{
+        int vertex;
+        int weight;
+        public Edge(int vertex, int weight){
+            this.vertex = vertex;
+            this.weight = weight;
+        }
+        public  int compareTo(Edge a){
+            if(weight<a.weight)
+                return -1;
+            if(weight>a.weight)
+                return 1;
+            if(vertex<a.vertex)
+                return -1;
+            if(vertex>a.vertex)
+                return 1;
+            return 0;
+        }
+
+        public String toString(){
+            return "("+ vertex + ", " + weight + ")";
+        }
+    }
+}
+
