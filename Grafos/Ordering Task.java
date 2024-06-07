@@ -11,33 +11,22 @@ public class OrderingTasks {
 	public static void main(String[] args) throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		while (true) {
-			String line = in.readLine();
-			StringTokenizer st = new StringTokenizer(line, " ");
+			StringTokenizer st = new StringTokenizer(in.readLine());
 			N = Integer.parseInt(st.nextToken());
 			int m = Integer.parseInt(st.nextToken());
 			if (N == 0 && m == 0)
 				break;
-			adj = new ArrayList[N + 1];
-			for (int i = 0; i < N + 1; i++)
+			adj = new ArrayList[N];
+			for (int i = 0; i < N; i++)
 				adj[i] = new ArrayList<>();
 			for (int i = 0; i < m; i++) {
-				String edges = in.readLine();
-				st = new StringTokenizer(edges, " ");
-				adj[Integer.parseInt(st.nextToken())].add(Integer.parseInt(st.nextToken()));
+				st = new StringTokenizer(in.readLine());
+				adj[Integer.parseInt(st.nextToken()) - 1].add(Integer.parseInt(st.nextToken()) - 1);
 			}
 
-			System.out.println(ans(top_sort()));
+			System.out.println(String.join(" ", top_sort()));
 
 		}
-
-	}
-
-	static String ans(int[] arr) {
-		String solve = "";
-		for (int i : arr)
-			if (i != 0)
-				solve += i+" ";
-		return solve;
 
 	}
 
@@ -52,17 +41,17 @@ public class OrderingTasks {
 		tsort.add(u);
 	}
 
-	static int[] top_sort() {
-		d = new int[N + 1];
-		t = new int[N + 1];
+	static String[] top_sort() {
+		d = new int[N];
+		t = new int[N];
 		time = 1;
 		tsort = new Stack<>();
-		for (int u = 0; u < N + 1; u++)
+		for (int u = 0; u < N; u++)
 			if (d[u] == 0)
 				dfs(u);
-		int[] tsort_arr = new int[N + 1];
-		for (int i = 0; i < N + 1; i++)
-			tsort_arr[i] = tsort.pop();
+		String[] tsort_arr = new String[N];
+		for (int i = 0; i < N; i++)
+			tsort_arr[i] = String.valueOf(tsort.pop() + 1);
 		return tsort_arr;
 	}
 
