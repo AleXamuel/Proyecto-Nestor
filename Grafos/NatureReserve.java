@@ -40,6 +40,9 @@ public class NautureDeserve {
 			}
 			prim();
 			System.out.println(Arrays.stream(d).sum());
+			//Also works:
+			//System.out.println(Arrays.stream(d).sum() + (n - s) * l);
+			//This way we don't need to add l to the weight of each edge.
 
 		}
 
