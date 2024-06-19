@@ -42,7 +42,7 @@ public class NautureDeserve {
 			System.out.println(Arrays.stream(d).sum());
 			//Also works:
 			//System.out.println(Arrays.stream(d).sum() + (n - s) * l);
-			//This way we don't need to add l to the weight of each edge.
+			//This way we don't need to add l to the weight of each edge but n,s and l must be long.
 
 		}
 
