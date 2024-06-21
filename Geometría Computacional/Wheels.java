@@ -26,18 +26,16 @@ public class Wheels {
 					s = new Point(i, x, y, r);
 				circulos[i] = new Point(i, x, y, r);
 			}
-			TreeSet<Point> circles = new TreeSet<>(List.of(circulos));
 			buildGraph(s, circulos);
 			bfs(s);
-			Map<Boolean, String> sentido = Map.of(true, "clockwise", false, "counterclockwise");
-			for (Point p : circles) {
+			for (Point p : new TreeSet<>(List.of(circulos)))
 				if (fracciones.containsKey(p)) {
 					Racional frac = fracciones.get(p);
 					frac.simplificar();
-					System.out.println(frac + " " + sentido.get(colores.get(p)));
+					System.out.println(
+							frac + " " + Map.of(true, "clockwise", false, "counterclockwise").get(colores.get(p)));
 				} else
 					System.out.println("not moving");
-			}
 
 		}
 
