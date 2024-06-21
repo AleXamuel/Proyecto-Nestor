@@ -50,8 +50,7 @@ public class Wheels {
 		visited.put(s, true);
 		while (!pila.isEmpty()) {
 			Point u = pila.pop();
-			for (int i = 0; i < n; i++) {
-				Point v = circulos[i];
+			for (Point v : circulos)
 				if (visited.get(v) == null)
 					if (seTocan(u, v)) {
 						visited.put(v, true);
@@ -59,7 +58,6 @@ public class Wheels {
 						pila.push(v);
 					}
 
-			}
 		}
 	}
 
@@ -116,28 +114,17 @@ public class Wheels {
 			return Integer.compare(prioridad, c.prioridad);
 		}
 
-		public int hashCode() {
-			return x * 10007 + y * 499 + r;
-		}
-
 		public boolean equals(Object o) {
 			Point op = (Point) o;
 			return x == op.x && y == op.y && r == op.r;
 		}
-
-		public String toString() {
-			return "(" + x + ", " + y + ", " + r + ")";
-		}
-
 	}
 
 	static class Racional {
-		private long numerador;
-		private long denominador;
+		long numerador;
+		long denominador;
 
 		Racional(long numerador, long denominador) {
-			if (denominador == 0)
-				denominador = 1;
 			this.numerador = numerador;
 			this.denominador = denominador;
 
@@ -158,7 +145,7 @@ public class Wheels {
 				return numerador + "/" + denominador;
 		}
 
-		private long mcd(long a, long b) {
+		long mcd(long a, long b) {
 			if (a % b == 0)
 				return b;
 			else
