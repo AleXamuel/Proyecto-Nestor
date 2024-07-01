@@ -1,3 +1,4 @@
+#Solution time: O(n^2)
 def polyMultiplication(poli1,poli2):
     m = len(poli1)
     n = len(poli2)
