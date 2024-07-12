@@ -1,0 +1,166 @@
+
+import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Monsters {
+
+    static int[][] d;
+    static int[][] da;
+    static int n;
+    static int m;
+
+    static ArrayList<int[]> inicios=new ArrayList<>();
+    static ArrayList<int[]> mon=new ArrayList<>();
+    static char[][] map;
+    static char[][]pi;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bf=new BufferedReader(new InputStreamReader(System.in));
+        String[] l1=bf.readLine().split(" ");
+        n=Integer.parseInt(l1[0]);
+        m=Integer.parseInt(l1[1]);
+        map=new char[n][m];
+        d=new int[n][m];
+        da=new int[n][m];
+        pi=new char[n][m];
+        int[] ini=new int[2];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                char a= (char) bf.read();
+                map[i][j]=a;
+                if((i==0||i==n-1||j==0||j==m-1)&&(a!='#'&&a!='M'))
+                    inicios.add(new int[]{i,j});
+                if(a=='M')
+                    mon.add(new int[]{i,j});
+                if(a=='A')
+                    ini=new int[]{i,j};
+
+            }
+            bf.readLine();
+        }
+        bfs();
+        bfs2(ini);
+        //System.out.println(Arrays.deepToString(pi));
+        for (int[] x: inicios){
+            int i=x[0];
+            int j=x[1];
+            if(da[i][j]<d[i][j]){
+                System.out.println("YES");
+                System.out.println(da[i][j]);
+                char[] res=new char[da[i][j]];
+                int index=da[i][j]-1;
+                while (index>=0){
+                    char c=pi[i][j];
+                    res[index]=c;
+                    index--;
+                    //System.out.println(c);
+                    if(c=='+')
+                        break;
+                    if(c=='D')
+                        i--;
+                    else if(c=='R')
+                        j--;
+                    else if(c=='U')
+                        i++;
+                    else if(c=='L')
+                        j++;
+                }
+                System.out.println(new String(res));
+                return;
+            }
+        }
+        System.out.println("NO");
+    }
+
+    static void bfs() {
+        boolean[][] state=new boolean[n][m];
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                d[i][j]= Integer.MAX_VALUE;
+            }
+        }
+        Queue<int[]> q=new LinkedList<>();
+        for(int[] i: mon){
+            int x=i[0];
+            int y=i[1];
+            d[x][y]=0;
+            state[x][y]=true;
+            q.add(i);
+        }
+        while (!q.isEmpty()){
+            int[] a=q.poll();
+            int i=a[0];
+            int j=a[1];
+            if(i+1<n&&map[i+1][j]!='#'&&!state[i+1][j]) {
+                q.add(new int[]{i + 1, j});
+                d[i + 1][j] = d[i][j] + 1;
+                state[i+1][j]=true;
+            }
+            if(i-1>=0&&map[i-1][j]!='#'&&!state[i-1][j]) {
+                q.add(new int[]{i - 1, j});
+                d[i - 1][j] = d[i][j] + 1;
+                state[i-1][j]=true;
+            }
+            if(j+1<m&&map[i][j+1]!='#'&&!state[i][j+1]) {
+                q.add(new int[]{i , j+1});
+                d[i][j+1] =d[i][j] + 1;
+                state[i][j+1]=true;
+            }
+            if(j-1>=0&&map[i][j-1]!='#'&&!state[i][j-1]) {
+                q.add(new int[]{i , j-1});
+                d[i][j-1] =  d[i][j] + 1;
+                state[i][j-1]=true;
+            }
+        }
+
+    }
+    static void bfs2(int[] ini) {
+        boolean[][] state=new boolean[n][m];
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                da[i][j]=Integer.MAX_VALUE;
+            }
+        }
+        Queue<int[]> q=new LinkedList<>();
+        int x=ini[0];
+        int y=ini[1];
+        pi[x][y]='+';
+        q.add(ini);
+        da[x][y]=0;
+        state[x][y]=true;
+        while (!q.isEmpty()){
+            int[] a=q.poll();
+            int i=a[0];
+            int j=a[1];
+            if(i+1<n&&map[i+1][j]!='#'&&!state[i+1][j]) {
+                q.add(new int[]{i + 1, j});
+                da[i + 1][j] = da[i][j] + 1;
+                state[i+1][j]=true;
+                pi[i+1][j]='D';
+            }
+            if(i-1>=0&&map[i-1][j]!='#'&&!state[i-1][j]) {
+                q.add(new int[]{i - 1, j});
+                da[i - 1][j] = da[i][j] + 1;
+                state[i-1][j]=true;
+                pi[i-1][j]='U';
+            }
+            if(j+1<m&&map[i][j+1]!='#'&&!state[i][j+1]) {
+                q.add(new int[]{i , j+1});
+                da[i][j+1] =da[i][j] + 1;
+                state[i][j+1]=true;
+                pi[i][j+1]='R';
+            }
+            if(j-1>=0&&map[i][j-1]!='#'&&!state[i][j-1]) {
+                q.add(new int[]{i , j-1});
+                da[i][j-1] =  da[i][j] + 1;
+                state[i][j-1]=true;
+                pi[i][j-1]='L';
+            }
+        }
+
+    }
+
+
+}
