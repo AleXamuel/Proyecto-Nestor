@@ -1,9 +1,10 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+/* https://vjudge.net/problem/SPOJ-SUBMERGE */
+
+import java.io.*;
 import java.util.*;
 
-public class Main {
+public class SubmergingIslands {
+    
     static int N;
     static int contador;
     static HashMap<String, Integer> indices;
@@ -36,19 +37,15 @@ public class Main {
                 if(ap[i])
                     contador++;
             }
-            //System.out.println(Arrays.toString(ap));
             System.out.println(contador);
-            
-
-
         }
-
     }
 
     static void addEdge(int a, int b){
         adj[a].add(b);
         adj[b].add(a);
     }
+    
     static void dfs(int u, int par) {
         d[u] = time++;
         low[u] = d[u];
