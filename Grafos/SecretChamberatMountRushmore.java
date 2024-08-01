@@ -1,13 +1,12 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
+/*https://open.kattis.com/problems/secretchamber*/
+
+import java.io.*;
+import java.util.*;
 
 class SecretLetters {
+    
     static HashMap<Character,LinkedList<Character>> adj;
+    
     public static void main(String[] args) throws IOException {
         BufferedReader bf= new BufferedReader(new InputStreamReader(System.in));
         adj=new HashMap<>();
@@ -18,7 +17,6 @@ class SecretLetters {
             String l2=bf.readLine();
             addEdge(l2.charAt(0),l2.charAt(2));
         }
-        //System.out.println(adj);
         for (int i = 0; i < m; i++) {
             String[] l2=bf.readLine().split(" ");
             try{
@@ -43,6 +41,7 @@ class SecretLetters {
         }
         return true;
     }
+    
     static void addEdge(char a, char b){
         if (adj.get(a) == null)
             adj.put(a, new LinkedList<>());
@@ -50,6 +49,7 @@ class SecretLetters {
             adj.put(b, new LinkedList<>());
         adj.get(a).add(b);
     }
+    
     static boolean bfs(char s,char t) {
         HashMap<Character,Character> state=new HashMap<>();
         state.put(s,'D');
