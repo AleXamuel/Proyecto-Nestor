@@ -1,8 +1,7 @@
+/*https://vjudge.net/problem/CSES-1194*/
 
 import java.util.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class Monsters {
 
@@ -114,8 +113,8 @@ public class Monsters {
                 state[i][j-1]=true;
             }
         }
-
     }
+    
     static void bfs2(int[] ini) {
         boolean[][] state=new boolean[n][m];
         for (int i = 0; i < map.length; i++) {
@@ -159,8 +158,5 @@ public class Monsters {
                 pi[i][j-1]='L';
             }
         }
-
     }
-
-
 }
