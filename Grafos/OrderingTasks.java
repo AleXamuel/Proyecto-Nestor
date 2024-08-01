@@ -1,6 +1,9 @@
+/* https://vjudge.net/problem/UVA-10305 */
 import java.io.*;
 import java.util.*;
-public class Main {
+
+public class OrderingTasks {
+
     static int n;
     static int time;
     static ArrayList<Integer>[] adj;
@@ -8,6 +11,7 @@ public class Main {
     static int[] d; //tiempo descubrimiento de cada vertice
     static int[] t; //tiempo de finalizacion de cada vertice(vecinos ya visitads del vertice actual)
     static  Stack<Integer>Toposort;
+
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         while (true){
@@ -26,8 +30,9 @@ public class Main {
             }
             System.out.println(String.join(" ",TopSort()));
 
-            }
+        }
     }
+
     static void dfs(int s){
         d[s] = time;
         time++;
@@ -39,6 +44,7 @@ public class Main {
         time++;
         Toposort.push(s);
     }
+
     static String[] TopSort() {
         time = 1;
         d = new int[n];
@@ -47,10 +53,9 @@ public class Main {
         Toposort = new Stack<>();
         for (int i = 0; i < n; i++)
             if (!state[i]) dfs(i);
-        String ans[] = new String[n];
+        String[] ans = new String[n];
         for (int i = 0;i<n;i++)
             ans[i] = String.valueOf(Toposort.pop() + 1);
         return ans;
     }
-
 }
