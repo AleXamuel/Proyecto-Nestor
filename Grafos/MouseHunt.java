@@ -1,24 +1,4 @@
-
-/*    
-                        _ooOoo_
-                       o8888888o
-                       88" . "88
-                       (| -_- |)
-                       O\  =  /O
-                    ____/`---'\____
-                  .'  \\|     |//  `.
-                 /  \\|||  :  |||//  \
-                /  _||||| -:- |||||_  \	
-                |   | \\\  -  /'| |   |
-                | \_|  `\`---'//  |_/ |
-                \  .-\__ `-. -'__/-.  /
-              ___`. .'  /--.--\  `. .'___
-           ."" '<  `.___\_<|>_/___.' _> \"".
-          | | :  `- \`. ;`. _/; .'/ /  .' ; |
-          \  \ `-.   \_\_`. _.'_/_/  -' _.' /
-===========`-.`___`-.__\ \___  /__.-'_.'_.-'================
-                        `=--=-'            
-                        */
+/*https://codeforces.com/problemset/problem/1027/D*/
 
 import java.io.*;
 import java.util.*;
@@ -29,7 +9,7 @@ public class MouseHunt {
 	static boolean[] state;
 	static Stack<Integer> Toposort;
 
-	public static void main(String[] args) throws Exception {
+	public static void MouseHunt(String[] args) throws Exception {
 		Input in = new Input(System.in);
 		n = in.nextInt();
 		int[] costos = new int[n];
@@ -41,7 +21,6 @@ public class MouseHunt {
 		for (int i = 0; i < n; i++)
 			adj[i].add(in.nextInt() - 1);
 		System.out.println(solve(costos));
-
 	}
 
 	static int solve(int[] costos) {
@@ -59,7 +38,6 @@ public class MouseHunt {
 			}
 		}
 		return ans;
-
 	}
 
 	static ArrayList<Integer> bfs(int s, boolean[] visited) {
@@ -114,7 +92,6 @@ public class MouseHunt {
 		public Input(InputStream f) {
 			br = new BufferedReader(new InputStreamReader(f));
 		}
-
 		String next() {
 			while (st == null || !st.hasMoreTokens()) {
 				try {
@@ -125,10 +102,8 @@ public class MouseHunt {
 			}
 			return st.nextToken();
 		}
-
 		int nextInt() {
 			return Integer.parseInt(next());
 		}
 	}
-
 }
