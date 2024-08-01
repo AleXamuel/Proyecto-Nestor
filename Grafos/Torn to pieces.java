@@ -1,15 +1,12 @@
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+/* https://open.kattis.com/problems/torn2pieces */
+import java.io.*;
 import java.util.*;
 
-public class Main {
+public class TornToPieces {
     static HashMap<String, List<String>> adjList;
     static Map<String,Integer> d = new HashMap<>();
     static Map<String,String> pi = new HashMap<>();
     static Map<String,Character> state = new HashMap<>();
-    static int c = 1;
     public static void main(String[] args) throws IOException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         int n=Integer.parseInt(bf.readLine());
@@ -30,13 +27,13 @@ public class Main {
         if(res==null)
             System.out.println("no route found");
         else{
-            String s="";
+            StringBuilder s= new StringBuilder();
             for(String i: res)
-                s+=i+" ";
+                s.append(i).append(" ");
             System.out.println(s);
         }
     }
-    public static Map<String, String> bfs(String s) {
+    public static void bfs(String s) {
         d.put(s,0);
         pi.put(s,null);
         state.put(s,'D');
@@ -53,7 +50,6 @@ public class Main {
                 }
             state.put(u,'E');
         }
-        return pi;
     }
 
     static LinkedList<String> shortestPath(String t, String s) {
@@ -67,10 +63,8 @@ public class Main {
         return path;
     }
     static void addEdge(String a, String b) {
-        if (adjList.get(a) == null)
-            adjList.put(a, new LinkedList<String>());
-        if (adjList.get(b) == null)
-            adjList.put(b, new LinkedList<String>());
+        adjList.computeIfAbsent(a, k -> new LinkedList<String>());
+        adjList.computeIfAbsent(b, k -> new LinkedList<String>());
         adjList.get(a).add(b);
         adjList.get(b).add(a);
     }
