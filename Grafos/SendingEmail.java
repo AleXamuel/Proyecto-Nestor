@@ -1,4 +1,5 @@
 /* https://vjudge.net/problem/UVA-10986 */
+
 import java.util.*;
 import java.io.*;
 
