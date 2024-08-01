@@ -1,8 +1,11 @@
+/*https://vjudge.net/problem/UVA-10505*/
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-public class Main{
+
+public class MontescoVsCapuleto{
     static int[] pi;
     static int n, m;
     static LinkedList<Integer>[] adjList;
@@ -45,7 +48,6 @@ public class Main{
         }
     }
 
-
     static void bfs(int s) {
         state[s]='D';
         pi[s]=-1;
@@ -72,10 +74,8 @@ public class Main{
                     if(pi[v]!=u)
                         if(grupo[v]==grupo[u])
                             ciclo=true;
-
             }
             state[u] = 'E';
-
         }
         if(!ciclo)
             numero+=Math.max(grupo1,grupo2);
@@ -85,5 +85,4 @@ public class Main{
         adjList[a].add(b);
         adjList[b].add(a);
     }
-
 }
