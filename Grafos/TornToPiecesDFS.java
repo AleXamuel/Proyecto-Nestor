@@ -1,10 +1,14 @@
+/* https://open.kattis.com/problems/torn2pieces */
 import java.io.*;
 import java.util.*;
+
 public class TornToPieces {
+
     static int n;
     static HashMap<String, ArrayList<String>> adj;
     static HashMap<String, Boolean> state;
     static HashMap<String, String> pi;
+    
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(in.readLine());
@@ -33,6 +37,7 @@ public class TornToPieces {
         else
             System.out.println(String.join(" ",ans));
     }
+    
     static LinkedList<String> solve(String s, String t){
         if(!adj.containsKey(t))
             return new LinkedList<>();
@@ -48,6 +53,7 @@ public class TornToPieces {
         }
        return caminos;
     }
+    
     static void dfs(String u){
         state.put(u, true);
         for(String v: adj.get(u))
