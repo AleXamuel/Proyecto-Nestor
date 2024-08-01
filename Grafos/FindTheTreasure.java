@@ -1,11 +1,14 @@
+/* https://vjudge.net/problem/SPOJ-DIGOKEYS */
 import java.util.*;
 import java.io.*;
 import java.util.stream.Collectors;
 
-public class find_treasure {
+public class FindTreasure {
+
     static int n;
     static ArrayList<Integer>[] adj;
     static boolean[] state;
+
     public static void main(String[] args) throws Exception{
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         int t = Integer.parseInt(in.readLine());
@@ -16,27 +19,28 @@ public class find_treasure {
                 adj[k] = new ArrayList<>();
             for (int j=0; j<n-1; j++){
                 StringTokenizer st = new StringTokenizer(in.readLine());
-               st.nextToken();
-               while(st.hasMoreTokens())
-                   adj[j].add(Integer.parseInt(st.nextToken())-1);
-               Collections.sort(adj[j]);
+                st.nextToken();
+                while(st.hasMoreTokens())
+                    adj[j].add(Integer.parseInt(st.nextToken())-1);
+                Collections.sort(adj[j]);
             }
             state = new boolean[n];
-            LinkedList<Integer> result = bfs(0);
-            if (result.get(0) == -1) System.out.println(-1);
-           else {
+            LinkedList<Integer> result = bfs();
+            if (result.getFirst() == -1) System.out.println(-1);
+            else {
                 System.out.println(result.size());
                 System.out.println(result.stream().map(String::valueOf).collect(Collectors.joining(" ")));
             }
         }
     }
-    static LinkedList<Integer> bfs(int s) {
+
+    static LinkedList<Integer> bfs() {
         int[] pi = new int[n];
         Arrays.fill(pi, -1);
-        pi[s] = -1;
-        state[s] = true;
+        pi[0] = -1;
+        state[0] = true;
         Queue<Integer> Q = new LinkedList<>();
-        Q.add(s);
+        Q.add(0);
         while (!Q.isEmpty()) {
             int u = Q.poll();
             for (int v : adj[u]) {
@@ -57,7 +61,7 @@ public class find_treasure {
             caminos.add(pos+1);
             while(pi[pos]!=-1){
                 pos = pi[pos];
-                caminos.add(0, pos+1);
+                caminos.addFirst(pos+1);
             }
         }
         return caminos;
