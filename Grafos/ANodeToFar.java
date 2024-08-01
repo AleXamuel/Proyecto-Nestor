@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Main{
     int INF=2000000000;
-    public static void main (String[] args){
+    public static void ANodeToFar (String[] args){
         Scanner tec=new Scanner(System.in);
         int j =1;
         while(true){
