@@ -1,3 +1,4 @@
+/* https://vjudge.net/problem/UVA-11504 */
 import java.io.*;
 import java.util.*;
 
@@ -66,7 +67,7 @@ public class Dominos {
         Toposort = new Stack<>();
         for (int i = 0; i < n; i++)
             if (!state[i]) dfsT(i);
-        int ans[] = new int[n];
+        int[] ans = new int[n];
         for (int i = 0;i<n;i++)
             ans[i] = Toposort.pop();
         return ans;
