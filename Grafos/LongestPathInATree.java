@@ -1,3 +1,5 @@
+/*https://vjudge.net/problem/SPOJ-PT07Z*/
+
 import java.util.*;
 import java.io.*;
 
@@ -23,7 +25,6 @@ public class LongestPathInATree {
 			adj[b].add(a);
 		}
 		System.out.println(solve());
-
 	}
 
 	static int solve() {
@@ -46,7 +47,5 @@ public class LongestPathInATree {
 		for (int u : adj[v])
 			if (!visitado[u])
 				dfs(u, dist + 1);
-
 	}
-
 }
