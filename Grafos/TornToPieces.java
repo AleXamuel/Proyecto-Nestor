@@ -1,4 +1,5 @@
 /* https://open.kattis.com/problems/torn2pieces */
+
 import java.io.*;
 import java.util.*;
 
