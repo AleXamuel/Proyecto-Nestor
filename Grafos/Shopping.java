@@ -1,18 +1,15 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.TreeSet;
+/*https://vjudge.net/problem/SPOJ-SHOP*/
 
-public class Main {
+import java.io.*;
+import java.util.*;
+
+public class Shopping {
+
     static ArrayList<Edge>[] adjList;
     static char[] state;
     static int[] d;
-
     static final int INF = 2147483647;
+    
     public static void main(String[] args) throws IOException {
         BufferedReader bf=new BufferedReader(new InputStreamReader(System.in));
         while(true){
@@ -28,7 +25,6 @@ public class Main {
             String s="";
             for (int i = 0; i < n; i++)
                 adjList[i]=new ArrayList<>();
-
             for (int i = 0; i < h; i++)
                 s+=bf.readLine();
             int goal=-1;
@@ -44,9 +40,7 @@ public class Main {
                         cerca=true;
                         break;
                     }
-
                 }
-
                 else if(s.charAt(i)=='D'){
                     goal=i;
                     if(i%w!=0&&s.charAt(i-1)!='X')
@@ -67,11 +61,9 @@ public class Main {
                         addEdge(i,i+w, s.charAt(i)-'0');
                     if(i-w>=0&&s.charAt(i-w)!='X')
                         addEdge(i,i-w, s.charAt(i)-'0');
-
                 }
             }
             if(!cerca) {
-                //System.out.println(Arrays.toString(adjList));
                 dijkstra(start);
                 System.out.println(d[goal]);
             }
