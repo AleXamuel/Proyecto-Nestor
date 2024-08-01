@@ -1,7 +1,10 @@
+/*https://open.kattis.com/problems/naturereserve*/
+
 import java.io.*;
 import java.util.*;
 
 public class NautureDeserve {
+	
 	static int n;
 	static ArrayList<Edge>[] adj;
 	static TreeSet<Edge> Q;
@@ -43,9 +46,7 @@ public class NautureDeserve {
 			//Also works:
 			//System.out.println(Arrays.stream(d).sum() + (n - s) * l);
 			//This way we don't need to add l to the weight of each edge but n,s and l must be long.
-
 		}
-
 	}
 
 	static void prim() {
@@ -63,9 +64,7 @@ public class NautureDeserve {
 						Q.add(new Edge(v, d[v]));
 					}
 				}
-
 			}
-
 		}
 	}
 
@@ -90,5 +89,4 @@ public class NautureDeserve {
 			return 0;
 		}
 	}
-
 }
