@@ -1,5 +1,4 @@
-
-
+// https://vjudge.net/problem/UVA-576
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
