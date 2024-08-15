@@ -1,3 +1,4 @@
+# https://codeforces.com/problemset/problem/1969/B
 t=int(input())
 for _ in range(t):
     s=input()
