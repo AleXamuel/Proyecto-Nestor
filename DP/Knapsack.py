@@ -1,6 +1,4 @@
-#Solution time O(n*w)
-
-#Recursive
+# https://vjudge.net/problem/AtCoder-dp_d
 def f(n,w):
     if dp[n][w]==-1:
         if n==-1:
