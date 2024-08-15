@@ -1,4 +1,4 @@
-
+//https://vjudge.net/problem/UVA-543
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
