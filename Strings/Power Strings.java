@@ -1,3 +1,4 @@
+// https://vjudge.net/problem/UVA-10298#google_vignette
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
