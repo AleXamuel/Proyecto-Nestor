@@ -1,5 +1,4 @@
-
-
+// https://vjudge.net/problem/UVA-11878
 import java.util.Scanner;
 
 public class Main {
