@@ -1,4 +1,3 @@
-
 /*https://vjudge.net/problem/CSES-1194*/
 
 import java.util.*;
