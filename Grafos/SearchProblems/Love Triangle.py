@@ -30,11 +30,10 @@ public class LoveTriangle {
 		}
 		boolean[] visited = new boolean[n];
 		for (int i = 0; i < n; i++)
-			if (!visited[i])
-				if (bfs(i, visited)) {
-					System.out.println("YES");
-					return;
-				}
+			if (!visited[i] && bfs(i, visited)) {
+				System.out.println("YES");
+				return;
+			}
 		System.out.println("NO");
 
 	}
