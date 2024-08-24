@@ -1,3 +1,4 @@
+#https://vjudge.net/problem/UVA-920
 class Point:
     def __init__(self,x,y):
         self.x = x
