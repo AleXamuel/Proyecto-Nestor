@@ -34,17 +34,14 @@ public class HoneyHeist {
 		Q.add(s);
 		while (!Q.isEmpty()) {
 			int u = Q.poll();
-			for (int v : getVecinos(u)) {
-				if (blocked.contains(v)) {
+			for (int v : getVecinos(u))
+				if (blocked.contains(v))
 					visited[v] = true;
-					continue;
-				}
-				if (!visited[v]) {
+				else if (!visited[v]) {
 					visited[v] = true;
 					d[v] = d[u] + 1;
 					Q.add(v);
 				}
-			}
 
 		}
 		if (d[t] > pasos)
@@ -57,12 +54,15 @@ public class HoneyHeist {
 	static ArrayList<Integer> getVecinos(int u) {
 		ArrayList<Integer> vecinos = new ArrayList<>();
 		int indiceFila = 0;
-		for (int i = 0; i < matrix.length; i++)
-			if (matrix[i][matrix[i].length - 1] >= u) {
+		int indiceColumna = 0;
+		for (int i = 0; i < matrix.length; i++) {
+			int val = Arrays.binarySearch(matrix[i], u);
+			if (val >= 0) {
 				indiceFila = i;
+				indiceColumna = val;
 				break;
 			}
-		int indiceColumna = Arrays.binarySearch(matrix[indiceFila], u);
+		}
 		if (indiceColumna == 0) {
 			if (indiceFila == 0) {
 				vecinos.add(matrix[0][1]);
@@ -82,11 +82,19 @@ public class HoneyHeist {
 				vecinos.add(matrix[indiceFila][indiceColumna + 1]);
 				return vecinos;
 			} else {
-				vecinos.add(matrix[indiceFila - 1][indiceColumna]);
-				vecinos.add(matrix[indiceFila][indiceColumna + 1]);
-				vecinos.add(matrix[indiceFila + 1][indiceColumna]);
-				vecinos.add(matrix[indiceFila + 1][indiceColumna + 1]);
-				return vecinos;
+				if (indiceFila < (r - 1)) {
+					vecinos.add(matrix[indiceFila - 1][indiceColumna]);
+					vecinos.add(matrix[indiceFila][indiceColumna + 1]);
+					vecinos.add(matrix[indiceFila + 1][indiceColumna]);
+					vecinos.add(matrix[indiceFila + 1][indiceColumna + 1]);
+					return vecinos;
+				} else {
+					vecinos.add(matrix[indiceFila - 1][indiceColumna]);
+					vecinos.add(matrix[indiceFila][indiceColumna + 1]);
+					vecinos.add(matrix[indiceFila + 1][indiceColumna]);
+					vecinos.add(matrix[indiceFila - 1][indiceColumna + 1]);
+					return vecinos;
+				}
 			}
 		}
 		if (indiceColumna == matrix[indiceFila].length - 1) {
@@ -118,7 +126,7 @@ public class HoneyHeist {
 					vecinos.add(matrix[indiceFila - 1][indiceColumna + 1]);
 					vecinos.add(matrix[indiceFila - 1][indiceColumna]);
 					vecinos.add(matrix[indiceFila][indiceColumna - 1]);
-					vecinos.add(matrix[indiceFila - 1][indiceColumna - 1]);
+					vecinos.add(matrix[indiceFila + 1][indiceColumna - 1]);
 					return vecinos;
 				}
 			}
