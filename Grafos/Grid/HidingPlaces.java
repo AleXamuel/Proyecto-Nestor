@@ -1,3 +1,4 @@
+//https://open.kattis.com/problems/hidingplaces
 import java.io.*;
 import java.util.*;
 
