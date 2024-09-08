@@ -2,15 +2,12 @@ import java.io.*;
 import java.util.*;
 
 public class HidingPlaces {
-	static HashMap<Character, Integer> cols;
-	static HashMap<Integer, Character> InvCols;
-
 	public static void main(String[] args) throws IOException {
 		Input in = new Input(System.in);
 		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
 		int t = in.nextInt();
-		cols = new HashMap<>();
-		InvCols = new HashMap<>();
+		HashMap<Character, Integer> cols = new HashMap<>();
+		char[] inv = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 		cols.put('a', 0);
 		cols.put('b', 1);
 		cols.put('c', 2);
@@ -19,14 +16,6 @@ public class HidingPlaces {
 		cols.put('f', 5);
 		cols.put('g', 6);
 		cols.put('h', 7);
-		InvCols.put(0, 'a');
-		InvCols.put(1, 'b');
-		InvCols.put(2, 'c');
-		InvCols.put(3, 'd');
-		InvCols.put(4, 'e');
-		InvCols.put(5, 'f');
-		InvCols.put(6, 'g');
-		InvCols.put(7, 'h');
 		while (t-- > 0) {
 			String a = in.next();
 			char[] s = a.toCharArray();
@@ -41,7 +30,7 @@ public class HidingPlaces {
 			for (int x = 0; x < 8; x++)
 				for (int y = 0; y < 8; y++)
 					if (matrix[x][y] == max)
-						out.write(InvCols.get(y) + "" + (8 - x) + " ");
+						out.write(inv[y] + "" + (8 - x) + " ");
 			out.write("\n");
 		}
 		out.flush();
