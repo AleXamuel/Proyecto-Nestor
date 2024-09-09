@@ -4,19 +4,7 @@
 using namespace std;
 
 bool cond(vector<vector<int>> grid, int r, int c) {
-	bool cond1 = false;
-	bool cond2 = false;
-	bool cond3 = false;
-	bool cond4 = false;
-	if (grid[r - 1][c] > grid[r][c])
-		cond1 = true;
-	if (grid[r + 1][c] > grid[r][c])
-		cond2 = true;
-	if (grid[r][c - 1] > grid[r][c])
-		cond3 = true;
-	if (grid[r][c + 1] > grid[r][c])
-		cond4 = true;
-	return cond1 && cond2 && cond3 && cond4;
+	return grid[r - 1][c] > grid[r][c] && grid[r + 1][c] > grid[r][c] && grid[r][c - 1] > grid[r][c] && grid[r][c + 1] > grid[r][c];
 }
 
 string solve(vector<vector<int>> grid, int n, int m) {
