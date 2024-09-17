@@ -1,5 +1,4 @@
 //https://vjudge.net/problem/CSES-1755
-//https://vjudge.net/problem/UVA-1223
 import java.util.*;
 import java.io.*;
 
