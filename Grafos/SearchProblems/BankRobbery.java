@@ -1,3 +1,4 @@
+//https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=5038
 import java.io.*;
 import java.util.*;
 
@@ -10,7 +11,7 @@ public class BankRobbery {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		PrintWriter out = new PrintWriter(System.out);
-		for (;;) {
+		for (int c;;) {
 			try {
 				st = new StringTokenizer(in.readLine());
 				n = Integer.parseInt(st.nextToken());
@@ -51,13 +52,10 @@ public class BankRobbery {
 				} else
 					masLejano = Integer.MAX_VALUE;
 				TreeSet<Integer> ans = new TreeSet<>();
-				int c = 0;
 				for (int i : bancos)
-					if (d[i] == masLejano) {
-						c++;
+					if (d[i] == masLejano)
 						ans.add(i);
-					}
-				out.println(c + " " + (masLejano == Integer.MAX_VALUE ? "*" : masLejano));
+				out.println(ans.size() + " " + (masLejano == Integer.MAX_VALUE ? "*" : masLejano));
 				c = 0;
 				for (int i : ans)
 					out.print(i + (c++ != ans.size() - 1 ? " " : ""));
