@@ -1,9 +1,9 @@
-static class Input {
+static class Scanner {
 		BufferedReader br;
 		StringTokenizer st;
 
-		public Input(InputStream f) {
-			br = new BufferedReader(new InputStreamReader(f));
+		public Scanner() {
+			br = new BufferedReader(new InputStreamReader(System.in));
 		}
 
 		String next() {
@@ -24,6 +24,9 @@ static class Input {
 		long nextLong() {
 			return Long.parseLong(next());
 		}
+		char nextChar() throws IOException {
+            		return (char) br.read(); 
+        	}
 
 		double nextDouble() {
 			return Double.parseDouble(next());
