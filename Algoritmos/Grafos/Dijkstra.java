@@ -1,12 +1,12 @@
 static boolean[] state;
 static ArrayList<Edge>[] adj;
 static int[] d;
+static int[] pi;
 static int INF =Integer.MAX_VALUE;
 
 
 static void dijkstra(int s, int t) {
     Arrays.fill(d, INF);
-    Arrays.fill(pi,-1);
     d[s] = 0;
     TreeSet<Edge> Q = new TreeSet<Edge>();
     Q.add(new Edge(s, d[s]));
