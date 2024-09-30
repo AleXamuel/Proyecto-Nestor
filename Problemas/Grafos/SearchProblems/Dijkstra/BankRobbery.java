@@ -18,9 +18,9 @@ public class BankRobbery {
 				int m = Integer.parseInt(st.nextToken());
 				int b = Integer.parseInt(st.nextToken());
 				int p = Integer.parseInt(st.nextToken());
-				adj = new ArrayList[n + 1];
-				d = new int[n + 1];
-				for (int i = 0; i < n + 1; i++) {
+				adj = new ArrayList[n];
+				d = new int[n];
+				for (int i = 0; i < n; i++) {
 					adj[i] = new ArrayList<>();
 					d[i] = Integer.MAX_VALUE;
 				}
@@ -38,15 +38,14 @@ public class BankRobbery {
 					bancos[i] = Integer.parseInt(st.nextToken());
 				int masLejano = -1;
 				if (p != 0) {
-					int[] cai = new int[p];
 					st = new StringTokenizer(in.readLine());
+					TreeSet<Edge> Q = new TreeSet<>();
 					for (int i = 0; i < p; i++) {
 						int val = Integer.parseInt(st.nextToken());
-						cai[i] = val;
-						adj[n].add(new Edge(val, 0));
-						adj[val].add(new Edge(n, 0));
+						d[val] = 0;
+						Q.add(new Edge(val, 0));
 					}
-					dijkstra(n);
+					dijkstra(Q);
 					for (int i : bancos)
 						masLejano = Math.max(masLejano, d[i]);
 				} else
@@ -68,11 +67,8 @@ public class BankRobbery {
 
 	}
 
-	static void dijkstra(int s) {
-		TreeSet<Edge> Q = new TreeSet<>();
-		boolean[] visited = new boolean[n + 1];
-		Q.add(new Edge(s, 0));
-		d[s] = 0;
+	static void dijkstra(TreeSet<Edge> Q) {
+		boolean[] visited = new boolean[n];
 		while (!Q.isEmpty()) {
 			Edge e = Q.pollFirst();
 			int u = e.vertex;
