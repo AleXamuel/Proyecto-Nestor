@@ -1,63 +1,97 @@
-// https://vjudge.net/problem/SPOJ-CONGRAPH
+//https://vjudge.net/problem/UVA-1223
 import java.util.*;
 import java.io.*;
 
 public class Main {
+    static ArrayList<Integer>[] adj;
+    static boolean[] state;
+    static int[] d;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner();
+        PrintWriter pw = new PrintWriter(System.out);
+        int n=sc.nextInt();
+        int m=sc.nextInt();
+        adj=new ArrayList[n];
+        state=new boolean[n];
+        d=new int[n];
+        for (int i = 0; i < n; i++)
+            adj[i]=new ArrayList<>();
+        for (int i = 0; i < m; i++) {
+            int u =sc.nextInt();
+            int v=sc.nextInt();
+            addEdge(u,v);
+        }
+        int c=-1;
+        for (int i = 0; i < n; i++) {
+            if(!state[i]){
+                bfs(i);
+                c++;
+            }
+        }
+        System.out.println(c);
 
-	static int n, m;
-	static ArrayList<Integer>[] adjList;
-	static char state[];
+    }
+    static void bfs(int s){
+        d[s]=0;
+        state[s]=true;
+        Queue<Integer> q=new LinkedList<>();
+        q.add(s);
+        while(!q.isEmpty()){
+            int u=q.poll();
+            for(int v:adj[u]){
+                if(!state[v]){
+                    d[v]=d[u]+1;
+                    state[v]=true;
+                    q.add(v);
+                }
+            }
+        }
+    }
+    static void addEdge(int u, int v){
+        adj[u].add(v);
+        adj[v].add(u);
+    }
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(in.readLine());
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());
-		adjList = new ArrayList[n];
-		for (int i = 0; i < n; i++)
-			adjList[i] = new ArrayList<>();
-		state = new char[n];
-		Arrays.fill(state, 'N');
-		for (int i = 0; i < m; i++) {
-			st = new StringTokenizer(in.readLine());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			addEdge(a, b);
-		}
-		System.out.println(solve(0));
 
-	}
 
-	static int solve(int s) {
-		int ans = 0;
-		dfs(s);
-		for (int i = 0; i < state.length; i++)
-			if (state[i] == 'N') {
-				ans++;
-				bfs(i);
-			}
-		return ans;
+    static class Scanner {
+        BufferedReader br;
+        StringTokenizer st;
 
-	}
+        public Scanner() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-	static void bfs(int s) {
-		state[s] = 'D';
-		Queue<Integer> Q = new LinkedList<Integer>();
-		Q.add(s);
-		while (!Q.isEmpty()) {
-			int u = Q.poll();
-			for (int v : adjList[u])
-				if (state[v] == 'N') {
-					state[v] = 'D';
-					Q.add(v);
-				}
-			state[u] = 'E';
-		}
-	}
+        public boolean ready() throws IOException {
+            return br.ready();
+        }
 
-	static void addEdge(int a, int b) {
-		adjList[a].add(b);
-		adjList[b].add(a);
-	}
+        String nextLine() throws IOException {
+            return br.readLine();
+        }
 
+        String next() {
+            while (st == null || !st.hasMoreTokens()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        char nextChar() throws IOException {
+            return (char) br.read();
+        }
+
+    }
 }
