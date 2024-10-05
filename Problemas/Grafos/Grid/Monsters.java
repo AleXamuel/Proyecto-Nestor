@@ -5,13 +5,10 @@ import java.io.*;
 
 public class MonstersIan {
 	static char[][] grid;
-
 	static int[][] dA, dM;
 	static boolean[][] stateA, stateM;
 	static Queue<int[]> Q;
-
 	static int[][][] pi;
-
 	static int n, m;
 
 	public static void main(String[] args) throws Exception {
@@ -74,10 +71,8 @@ public class MonstersIan {
 				break;
 			}
 		}
-		if (!cond) {
+		if (!cond)
 			System.out.println("NO");
-		}
-
 	}
 
 	static String printPath(List<int[]> path, int si, int sj) {
@@ -178,14 +173,6 @@ public class MonstersIan {
 			}
 		}
 	}
-
-	static String print(int[][] A) {
-		StringBuffer buf = new StringBuffer();
-		for (int[] i : A)
-			buf.append("[" + i[0] + ", " + i[1] + "]" + ", ");
-		return new String(buf);
-	}
-
 }
 
 
