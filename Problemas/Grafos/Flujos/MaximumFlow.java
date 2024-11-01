@@ -1,42 +1,42 @@
-import java.util.*;
+//https://open.kattis.com/problems/maxflow
 import java.io.*;
-class MaximunFLow {
+import java.util.*;
+class Main {
+    static long c=0;
+    static int[][] capacity;
+    static int[][] fEdges;
+    static ArrayList<Integer>[] adj;
     static int INF = Integer.MAX_VALUE;
     static int n;
-    static int[][] capacity;
-    static int[][] flowEdges;
-    static ArrayList<Integer>[] adj;
     public static void main(String[] args) throws IOException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        String[] l1 = bf.readLine().split(" ");
-        n = Integer.parseInt(l1[0]);
-        int m = Integer.parseInt(l1[1]);
-        int s = Integer.parseInt(l1[2]);
-        int t = Integer.parseInt(l1[3]);
+        Scanner sc=new Scanner();
+        PrintWriter out=new PrintWriter(System.out);
+        n=sc.nextInt();
+        int m=sc.nextInt(),s=sc.nextInt(),t=sc.nextInt();
+        capacity=new int[n][n];
+        fEdges=new int[n][n];
         adj=new ArrayList[n];
         for (int i = 0; i < n; i++)
             adj[i]=new ArrayList<>();
-        capacity=new int[n][n];
-        flowEdges=new int[n][n];
         for (int i = 0; i < m; i++) {
-            String[] l2 = bf.readLine().split(" ");
-            int a = Integer.parseInt(l2[0]);
-            int b = Integer.parseInt(l2[1]);
-            int c = Integer.parseInt(l2[2]);
-            adj[a].add(b);
-            adj[b].add(a);
-            capacity[a][b]=c;
-
+            int u=sc.nextInt(),v=sc.nextInt(),w=sc.nextInt();
+            adj[u].add(v);
+            adj[v].add(u);
+            capacity[u][v]=w;
         }
-        int res=maxflow(s,t);
-        LinkedList<int[]> l=new LinkedList<>();
+        int f=maxflow(s,t);
+        LinkedList<int[]> list=new LinkedList<>();
         for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                if(flowEdges[i][j]>0)
-                    l.add(new int[]{i,j,flowEdges[i][j]});
-        System.out.println(n+" "+res+" "+l.size());
-        for (int[] i:l)
-            System.out.println(i[0]+" "+i[1]+" "+i[2]);
+            for (int j = 0; j < n; j++) {
+                if (i == j) continue;
+                if(fEdges[i][j]>0)
+                    list.add(new int[]{i,j});
+            }
+        out.println(n+" "+f+" "+list.size());
+        for (int[] i:list)
+            out.println(i[0]+" "+i[1]+" "+fEdges[i[0]][i[1]]);
+        out.close();
+
 
     }
     static boolean bfs(int s, int t, int[] parent){
@@ -70,14 +70,74 @@ class MaximunFLow {
             }
             for (int cur = t; cur != s; cur = pi[cur]) {
                 int p = pi[cur];
-                flowEdges[p][cur] += flow;
-                flowEdges[cur][p] -= flow;
                 capacity[p][cur] -= flow;
                 capacity[cur][p] += flow;
+                fEdges[p][cur] += flow;
+                fEdges[cur][p] -= flow;
             }
 
             maxflow += flow;
         }
         return maxflow;
     }
+    static class Scanner {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public Scanner() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        String next() {
+            while (st == null || !st.hasMoreTokens()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        char nextChar() throws IOException {
+            return (char) br.read();
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        public String nextLine() throws Exception {
+            return br.readLine();
+        }
+
+        public void close() throws IOException {
+            br.close();
+        }
+
+        public boolean hasNext() {
+            try {
+                while (st == null || !st.hasMoreTokens())
+                    st = new StringTokenizer(br.readLine());
+
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
+        }
+
+        public boolean ready() throws IOException {
+            return br.ready();
+        }
+
+    }
+
 }
