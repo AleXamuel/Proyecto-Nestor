@@ -2,7 +2,7 @@ static boolean[] state;
 static ArrayList<Edge>[] adj;
 static int[] d,pi;
 static int INF =Integer.MAX_VALUE;
-static void dijkstra(int s, int t) {
+static void dijkstra(int s) {
     Arrays.fill(d, INF);
     d[s] = 0;
     TreeSet<Edge> Q = new TreeSet<>();
@@ -13,7 +13,7 @@ static void dijkstra(int s, int t) {
         if (!state[u]) {
             state[u] = true;
             for (Edge ee : adj[u]) {
-                int v = ee.vertex,w = ee.weight;;
+                int v = ee.vertex,w = ee.weight;
                 if (!state[v])
                     if (d[u] + w < d[v]) {
                         d[v] = d[u] + w;
