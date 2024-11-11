@@ -1,3 +1,4 @@
+#https://leetcode.com/problems/longest-increasing-subsequence/description/
 #Solution time O(n^2)
 def f(A):
     n = len(A)
