@@ -101,7 +101,7 @@ int main() {
             else
                 fl.add_edge(i,n+1,1);
         }
-        for(int i =1;i<=m;i++) {x
+        for(int i =1;i<=m;i++) {
             int u,v;
             cin >> u >> v;
             fl.add_edge(u,v,1);
