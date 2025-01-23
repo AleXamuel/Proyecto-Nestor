@@ -4,6 +4,8 @@
 using namespace std;
 typedef long long ll;
 ll* t;
+int* t;
+int ans=-1;
 void buildST(int a[], int v, int tl, int tr) {
     if (tl == tr) {
         t[v] = a[tl];
@@ -17,20 +19,24 @@ void buildST(int a[], int v, int tl, int tr) {
 void build(int a[],int n) {
     buildST(a,1,0,n-1);
 }
-int get_firstST(int v, int l, int r, int x) {
-    if(x>t[v]) return -1;
-    if(l==r && x<=t[v]) return l;
-    int mid = (l+r)/2;
-    int left=t[2*v];
-    if(x<=left) return get_firstST(2*v,l,mid,x);
-    return get_firstST(2*v+1,mid+1,r,x);
+void get_firstST(int v, int l, int r, int x, int j) {
+    if(t[v]<x)return;
+    if(ans>-1)return;
+    if(l==r) {
+        if(t[v]>=x)
+            ans=l;
+        return;
+    }
+    int m = (l+r)/2;
+    get_firstST(v*2,l,m,x,j);
+    get_firstST(v*2+1,m+1,r,x,j);
 }
-int first(int n,int x) {
-    return get_firstST(1,0,n-1,x);
+void first(int n,int x, int j) {
+    return get_firstST(1,0,n-1,x,j);
 }
-void updateST(int v, int tl, int tr, int pos, ll new_val) {
+void updateST(int v, int tl, int tr, int pos, int new_val) {
     if (tl == tr) {
-        t[v] -= new_val;
+        t[v] = new_val;
     } else {
         int tm = (tl + tr) / 2;
         if (pos <= tm)
