@@ -1,4 +1,4 @@
-//https://vjudge.net/contest/686598#problem/C
+//https://www.spoj.com/problems/FILRTEST/en/
 #include <iostream>
 #include <vector>
 #include <string>
