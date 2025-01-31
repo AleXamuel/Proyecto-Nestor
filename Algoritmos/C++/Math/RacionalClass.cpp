@@ -14,3 +14,7 @@ struct Racional {
         return mcd(b, a % b);
     }
 }
+
+ostream &operator<<(ostream &os, const Racional &p) {
+    return os << p.num << "/" << p.den;
+}
