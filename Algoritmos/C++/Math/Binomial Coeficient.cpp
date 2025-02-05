@@ -1,4 +1,5 @@
-
+vector<int> fact;
+vector<int> invFact;
 ll modPow(ll base, ll exp, int mod) {
     ll res = 1, x = base % mod;
     while (exp > 0) {
