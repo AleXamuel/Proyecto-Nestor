@@ -1,5 +1,6 @@
-vector<int> fact;
-vector<int> invFact;
+#define ll unsigned long long
+vector<ll> fact;
+vector<ll> invFact;
 ll modPow(ll base, ll exp, int mod) {
     ll res = 1, x = base % mod;
     while (exp > 0) {
