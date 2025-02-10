@@ -77,3 +77,4 @@ int main() {
         solve();
     return 0;
 }
+//This code also work for easy version
