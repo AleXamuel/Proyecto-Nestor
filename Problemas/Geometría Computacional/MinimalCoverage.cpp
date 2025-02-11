@@ -1,55 +1,58 @@
 //https://vjudge.net/problem/UVA-10020
-using namespace std;
 #include <bits/stdc++.h>
-
-#define all(A) A.begin(),A.end()
-#define fori(i, k, n) for (int i = k; i < n; i++)
-#define ln "\n"
+using namespace std;
+using ll = long long;
 
 void solve() {
-    int M;
-    cin >> M;
-    vector<pair<int, int> > A;
-    while (true) {
-        int l, r;
-        cin >> l >> r;
-        if (l == 0 && r == 0)
-            break;
-        A.emplace_back(l, r);
-    }
-    sort(all(A));
-    int cur = 0;
-    vector<pair<int, int> > ans;
-    while (cur < M) {
-        pair<int, int> need = {INT_MIN,INT_MIN};
-        for (const auto &e: A) {
-            int l = e.first;
-            int r = e.second;
-            if (l <= cur && r >= cur)
-                if (r >= need.second)
-                    need = {l, r};
+    int t;
+    cin >> t;
+    while (t--) {
+        int m;
+        cin >> m;
+        vector<pair<int, int> > v;
+        while (true) {
+            int x, y;
+            cin >> x >> y;
+            if (x == 0 && y == 0) break;
+            v.emplace_back(x, y);
         }
-        cur = need.second;
-        if (cur == INT_MIN) {
-            cout << 0 << ln;
-            cout << ln;
-            return;
+        sort(v.begin(), v.end());
+        vector<pair<int, int> > ans;
+        int cur = 0;
+        int index = -1;
+        bool flag = true;
+        while (cur < m) {
+            pair<int, int> aux = {INT_MIN, INT_MIN};
+            for (int i = index + 1; i < v.size(); i++) {
+                int left = v[i].first;
+                int right = v[i].second;
+                if (left <= cur && right >= cur) {
+                    if (right >= aux.second) {
+                        aux = v[i];
+                        index = i;
+                    }
+                }
+            }
+
+            cur = aux.second;
+            if (cur == INT_MIN) {
+                flag = false;
+                break;
+            }
+            ans.emplace_back(aux);
         }
-        A.erase(remove(all(A), need), A.end());
-        ans.emplace_back(need);
+        if (flag) {
+            cout << ans.size() << endl;
+            for (const auto &x: ans) {
+                cout << x.first << ' ' << x.second << endl;
+            }
+        } else cout << 0 << endl;
     }
-    cout << ans.size() << ln;
-    for (const auto &e: ans)
-        cout << e.first << " " << e.second << ln;
-    cout << ln;
 }
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    int t;
-    cin >> t;
-    while (t--)
-        solve();
+    solve();
     return 0;
 }
