@@ -1,4 +1,4 @@
-vector<int> d, low, pi, Size;
+vector<int>pi, Size;
 int Find(int u) {
     int aux = u;
     while (u != pi[u])
