@@ -1,4 +1,5 @@
 //https://codeforces.com/edu/course/2/lesson/6/4/practice/contest/285069/problem/A
+//https://codeforces.com/edu/courses
 using namespace std;
 #include <bits/stdc++.h>
 #include <iostream>
