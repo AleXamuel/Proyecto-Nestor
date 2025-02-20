@@ -43,7 +43,7 @@ private:
     }
 
 public:
-    SegmentTree(vector<int>& a) {
+    ST(vector<int>& a) {
         n = a.size();
         t.resize(4 * n);
         buildST(a, 1, 0, n - 1);
