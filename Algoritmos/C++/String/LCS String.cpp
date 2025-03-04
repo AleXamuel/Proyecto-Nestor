@@ -13,7 +13,6 @@ string LCS(string s1, string s2) {
             }
         }
         int index = dp[m][k];
-        char[] lcs = new char[index];
         string lcs(index,'#');
         int i = m, j = k;
         while (i > 0 && j > 0) {
