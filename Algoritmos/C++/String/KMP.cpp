@@ -1,48 +1,22 @@
-
-void computeLPSArray(string &pat, int M, vector<int> &lps) {
-    int len = 0;
-    lps[0] = 0;
-    int i = 1;
-    while (i < M) {
-        if (pat[i] == pat[len]) {
-            len++;
-            lps[i] = len;
-            i++;
-        } else {
-            if (len != 0) {
-                len = lps[len - 1];
-            } else{
-
-                lps[i] = 0;
-                i++;
-            }
-        }
-    }
-}
-vector<int> KMPSearch(string &pat, string &txt) {
-    int M = pat.length();
-    int N = txt.length();
-    vector<int> lps(M);
-    vector<int> result;
-    computeLPSArray(pat, M, lps);
-    int i = 0;
-    int j = 0;
-    while ((N - i) >= (M - j)) {
-        if (pat[j] == txt[i]) {
+vector<int> prefix_function(string s) {
+    int n = (int)s.length();
+    vector<int> pi(n);
+    for (int i = 1; i < n; i++) {
+        int j = pi[i-1];
+        while (j > 0 && s[i] != s[j])
+            j = pi[j-1];
+        if (s[i] == s[j])
             j++;
-            i++;
-        }
-
-        if (j == M) {
-            result.push_back(i - j + 1);
-            j = lps[j - 1];
-        }
-        else if (i < N && pat[j] != txt[i]) {
-            if (j != 0)
-                j = lps[j - 1];
-            else
-                i = i + 1;
-        }
+        pi[i] = j;
     }
-    return result;
+    return pi;
 }
+
+//return the frequence of every prefix
+vector<int> ans(n + 1);
+for (int i = 0; i < n; i++)
+    ans[pi[i]]++;
+for (int i = n-1; i > 0; i--)
+    ans[pi[i-1]] += ans[i];
+for (int i = 0; i <= n; i++)
+    ans[i]++;
