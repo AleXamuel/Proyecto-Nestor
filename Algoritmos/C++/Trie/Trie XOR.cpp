@@ -39,7 +39,7 @@ ll query(trieNode *root, ll pre_xor, ll max_bits) {
 ll maxSubarrayXOR(vector<ll> &arr, ll n = -1, ll max_val = LONG_MIN) {
     if (n == -1) n = arr.size();
     if (max_val == LONG_MIN) max_val = *max_element(arr.begin(), arr.end());
-    ll max_bits = 9;
+    ll max_bits = 64 - __builtin_clzll(max_val | 1);
 
     trieNode *root = newNode();
     insert(root, 0, max_bits);
