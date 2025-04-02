@@ -1,3 +1,7 @@
+int t[4 * MAXN][4 * MAXN];
+int a[MAXN][MAXN];
+int n, m;
+
 void build_y(int vx, int lx, int rx, int vy, int ly, int ry) {
     if (ly == ry) {
         if (lx == rx)
