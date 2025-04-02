@@ -1,49 +1,112 @@
 //https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=73&page=show_problem&problem=1197
-
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <cmath>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-struct pt {
+struct Point {
     double x, y;
-    bool operator == (pt const& t) const {
-        return x == t.x && y == t.y;
+    
+    bool operator==(const Point& other) const {
+        return x == other.x && y == other.y;
+    }
+    
+    Point operator-(const Point& other) const {
+        return {x - other.x, y - other.y};
     }
 };
 
-int orientation(pt a, pt b, pt c) {
-    double v = a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y);
-    if (v < 0) return -1; // clockwise
-    if (v > 0) return +1; // counter-clockwise
-    return 0;
+int orientation(const Point& a, const Point& b, const Point& c) {
+    double cross = (b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x);
+    return (cross < 0) ? -1 : (cross > 0) ? 1 : 0;
 }
 
-bool cw(pt a, pt b, pt c, bool include_collinear) {
-    int o = orientation(a, b, c);
-    return o < 0 || (include_collinear && o == 0);
-}
-bool collinear(pt a, pt b, pt c) { return orientation(a, b, c) == 0; }
 
-void convex_hull(vector<pt>& a, bool include_collinear = false) {
-    pt p0 = *min_element(a.begin(), a.end(), [](pt a, pt b) {
-        return make_pair(a.y, a.x) < make_pair(b.y, b.x);
+vector<Point> convexHull(vector<Point> points, bool includeCollinear = false) {
+    if (points.size() <= 1) return points;
+    
+    sort(points.begin(), points.end(), [](const Point& a, const Point& b) {
+        return make_pair(a.x, a.y) < make_pair(b.x, b.y);
     });
-    sort(a.begin(), a.end(), [&p0](const pt& a, const pt& b) {
-        int o = orientation(p0, a, b);
-        if (o == 0)
-            return (p0.x-a.x)*(p0.x-a.x) + (p0.y-a.y)*(p0.y-a.y)
-                < (p0.x-b.x)*(p0.x-b.x) + (p0.y-b.y)*(p0.y-b.y);
-        return o < 0;
-    });
-    if (include_collinear) {
-        int i = (int)a.size()-1;
-        while (i >= 0 && collinear(p0, a[i], a.back())) i--;
-        reverse(a.begin()+i+1, a.end());
+    
+    vector<Point> hull;
+    for (int phase = 0; phase < 2; ++phase) {
+        auto start = hull.size();
+        for (const auto& p : points) {
+            while (hull.size() >= start + 2) {
+                auto a = hull[hull.size()-2];
+                auto b = hull.back();
+                int o = orientation(a, b, p);
+                if (o < 0 || (!includeCollinear && o == 0)) break;
+                hull.pop_back();
+            }
+            hull.push_back(p);
+        }
+        hull.pop_back();
+        reverse(points.begin(), points.end());
+    }
+    
+    if (hull.size() == 2 && hull[0] == hull[1]) hull.pop_back();
+    return hull;
+}
+
+class PolygonIntersectionChecker {
+public:
+    static bool check(const vector<Point>& poly1, const vector<Point>& poly2) {
+        return checkSeparatingAxis(poly1, poly2) && checkSeparatingAxis(poly2, poly1);
     }
 
+private:
+    static bool checkSeparatingAxis(const vector<Point>& poly1, const vector<Point>& poly2) {
+        for (size_t i = 0; i < poly1.size(); ++i) {
+            Point edge = poly1[(i+1)%poly1.size()] - poly1[i];
+            Point normal = {-edge.y, edge.x};
+            
+            // Normalizar el vector normal
+            double len = sqrt(normal.x*normal.x + normal.y*normal.y);
+            normal.x /= len;
+            normal.y /= len;
+            
+            auto [min1, max1] = projectPolygon(poly1, normal);
+            auto [min2, max2] = projectPolygon(poly2, normal);
+            
+            if (max1 < min2 || max2 < min1) return false;
+        }
+        return true;
+    }
+    
+    static pair<double, double> projectPolygon(const vector<Point>& poly, const Point& axis) {
+        double min_proj = axis.x*poly[0].x + axis.y*poly[0].y;
+        double max_proj = min_proj;
+        
+        for (const auto& p : poly) {
+            double proj = axis.x*p.x + axis.y*p.y;
+            min_proj = min(min_proj, proj);
+            max_proj = max(max_proj, proj);
+        }
+        return {min_proj, max_proj};
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    while (true) {
+        int M, C;
+        cin >> M >> C;
+        if (M == 0 && C == 0) break;
+
+        vector<Point> pointsM(M), pointsC(C);
+        for (auto& p : pointsM) cin >> p.x >> p.y;
+        for (auto& p : pointsC) cin >> p.x >> p.y;
+        
+        auto hullM = convexHull(pointsM);
+        auto hullC = convexHull(pointsC);
+        
+        cout << (PolygonIntersectionChecker::check(hullM, hullC) ? "No" : "Yes") << endl;
+    }
+    
+    return 0;
+}
     vector<pt> st;
     for (int i = 0; i < (int)a.size(); i++) {
         while (st.size() > 1 && !cw(st[st.size()-2], st.back(), a[i], include_collinear))
@@ -59,17 +122,14 @@ void convex_hull(vector<pt>& a, bool include_collinear = false) {
 
 class PolygonIntersection {
 private:
-    // Producto punto de dos vectores
     static double dotProduct(const pt& a, const pt& b) {
         return a.x * b.x + a.y * b.y;
     }
     
-    // Obtener el vector normal de un lado
     static pt getNormal(const pt& edge) {
         return pt{-edge.y, edge.x};
     }
     
-    // Proyectar un polígono sobre un eje
     static void projectPolygon(const std::vector<pt>& vertices, const pt& axis, double& min, double& max) {
         min = dotProduct(vertices[0], axis);
         max = min;
@@ -83,7 +143,6 @@ private:
 
 public:
     static bool doPolygonsIntersect(const std::vector<pt>& poly1, const std::vector<pt>& poly2) {
-        // Verificar ejes de poly1
         for (size_t i = 0; i < poly1.size(); i++) {
             size_t next = (i + 1) % poly1.size();
             pt edge = {
@@ -92,23 +151,19 @@ public:
             };
             pt normal = getNormal(edge);
             
-            // Normalizar el eje
             double length = sqrt(normal.x * normal.x + normal.y * normal.y);
             normal.x /= length;
             normal.y /= length;
             
-            // Proyectar ambos polígonos sobre el eje
             double min1, max1, min2, max2;
             projectPolygon(poly1, normal, min1, max1);
             projectPolygon(poly2, normal, min2, max2);
             
-            // Si hay un hueco entre las proyecciones, no hay intersección
             if (max1 < min2 || max2 < min1) {
                 return false;
             }
         }
         
-        // Verificar ejes de poly2
         for (size_t i = 0; i < poly2.size(); i++) {
             size_t next = (i + 1) % poly2.size();
             pt edge = {
@@ -130,7 +185,7 @@ public:
             }
         }
         
-        return true; // No se encontró eje separador
+        return true; 
     }
 };
 
