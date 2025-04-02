@@ -28,6 +28,6 @@ int get(int v, int tl, int tr, int pos) {
         return t[v];
     int tm = (tl + tr) / 2;
     if (pos <= tm)
-        return t[v] + get(v*2, tl, tm, pos);
+        return t[v] + get(v*2, tl, tm, pos); 
     return t[v] + get(v*2+1, tm+1, tr, pos);
 }
