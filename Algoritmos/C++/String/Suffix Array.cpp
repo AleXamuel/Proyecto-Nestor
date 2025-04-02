@@ -63,17 +63,14 @@ int arr[N];
 int main() {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    int ti;
-    cin >> ti;
-    while (ti--) {
-        string s;
-        cin >> s;
-        s+="$";
-        for (int i = 0; i < s.length(); i++) arr[i]=s[i];
-        suffix_array(arr, s.size());
-        for (int i = 0; i < s.size(); i++)
-            cout<<lcp[i]<<" ";
-        cout << endl;
-    }
+    string s;
+    cin >> s;
+    s+="$";
+    for (int i = 0; i < s.length(); i++) arr[i]=s[i];
+    suffix_array(arr, s.size());
+    for (int i = 0; i < s.size(); i++)
+        cout<<lcp[i]<<" ";
+    cout << endl;
+    
     return 0;
 }
