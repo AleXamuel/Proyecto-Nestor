@@ -9,17 +9,16 @@ using namespace std;
 
 vector<int> primos;
 
-void precompute() {
-    int n = 31624;
+void precompute(int cota) {
+    int n = sqrt(cota);
     vector<bool> is_prime(n, true);
     is_prime[0] = is_prime[1] = false;
-    for (ll i = 3; i <= n; i += 2)
-        if (is_prime[i])
+    for (ll i = 2; i <= n; i++)
+        if (is_prime[i]) {
+            primos.push_back(i);
             for (ll j = i * i; j <= n; j += i)
                 is_prime[j] = false;
-    For(i, 2, n)
-        if (is_prime[i])
-            primos.push_back(i);
+        }
 }
 
 int decompose(int n) {
@@ -59,10 +58,11 @@ void solve() {
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    precompute();
+    precompute(1000000000);
     int t = 1;
     cin >> t;
     while (t--)
         solve();
     return 0;
 }
+
