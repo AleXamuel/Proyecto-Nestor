@@ -4,8 +4,7 @@ int timer;
 vector<int> tin, tout;
 vector<vector<int>> up;
 
-void dfs(int v, int p)
-{
+void dfs(int v, int p){
     tin[v] = ++timer;
     up[v][0] = p;
     for (int i = 1; i <= l; ++i)
@@ -19,13 +18,11 @@ void dfs(int v, int p)
     tout[v] = ++timer;
 }
 
-bool is_ancestor(int u, int v)
-{
+bool is_ancestor(int u, int v){
     return tin[u] <= tin[v] && tout[u] >= tout[v];
 }
 
-int lca(int u, int v)
-{
+int lca(int u, int v){
     if (is_ancestor(u, v))
         return u;
     if (is_ancestor(v, u))
@@ -44,4 +41,15 @@ void preprocess(int root) {
     l = ceil(log2(n));
     up.assign(n, vector<int>(l + 1));
     dfs(root, root);
+}
+//when you already have a tree and an array of parents
+void make_up(){
+l = ceil(log2(n));
+up.assign(n, vector<int>(l + 1),-1);
+for(int i=0;i<n;i++)
+    up[i][0]=parent[i];
+for(int j=1;j<=l;j++)
+    for(int i=0;i<n;i++)
+        if(up[i][j-1]>=0)
+            up[v][i] = up[up[v][i-1]][i-1];
 }
