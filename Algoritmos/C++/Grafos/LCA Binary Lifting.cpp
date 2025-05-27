@@ -1,55 +1,40 @@
 int n, l;
-vector<vector<int>> adj;
-int timer;
-vector<int> tin, tout;
-vector<vector<int>> up;
-
-void dfs(int v, int p){
-    tin[v] = ++timer;
-    up[v][0] = p;
-    for (int i = 1; i <= l; ++i)
-        up[v][i] = up[up[v][i-1]][i-1];
-
-    for (int u : adj[v]) {
-        if (u != p)
-            dfs(u, v);
-    }
-
-    tout[v] = ++timer;
-}
-
-bool is_ancestor(int u, int v){
-    return tin[u] <= tin[v] && tout[u] >= tout[v];
-}
-
-int lca(int u, int v){
-    if (is_ancestor(u, v))
-        return u;
-    if (is_ancestor(v, u))
-        return v;
-    for (int i = l; i >= 0; --i) {
-        if (!is_ancestor(up[u][i], v))
-            u = up[u][i];
-    }
-    return up[u][0];
-}
-
+vector<int>parent,depth;
+vector<vector<int>>up;
 void preprocess(int root) {
-    tin.resize(n);
-    tout.resize(n);
-    timer = 0;
-    l = ceil(log2(n));
-    up.assign(n, vector<int>(l + 1));
-    dfs(root, root);
-}
-//when you already have a tree and an array of parents
-void make_up(){
-l = ceil(log2(n));
-up.assign(n, vector<int>(l + 1),-1);
-for(int i=0;i<n;i++)
-    up[i][0]=parent[i];
-for(int j=1;j<=l;j++)
+    l=ceil(log2(n));
+    up.assign(n,vector<int>(l+1,root));
     for(int i=0;i<n;i++)
-        if(up[i][j-1]>=0)
-            up[v][i] = up[up[v][i-1]][i-1];
+        up[i][0]=parent[i];
+
+    for(int j=1;j<=l;j++)
+        for(int i=0;i<n;i++)
+            if(up[i][j-1]>=0)
+                up[i][j]=up[up[i][j-1]][j-1];
+
+
+}
+int binaryLifting(int u, int x) {
+    for(int i=0;i<=l;i++)
+        if(x&(1<<i))
+            u=up[u][i];
+    return u;
+}
+int lca(int a, int b) {
+    if(depth[a]<depth[b])
+        swap(a,b);
+    a=binaryLifting(a,depth[a]-depth[b]);
+    if(a==b)return a;
+    for(int i=l;i>=0;i--) {
+        if(up[a][i]==up[b][i])
+            continue;
+        a=up[a][i];
+        b=up[b][i];
+    }
+    return up[a][0];
+}
+int calc_depth(int u) {
+    if(parent[u]==-1)return depth[u]=0;
+    if(depth[u]>=0)return depth[u];
+    return depth[u]=calc_depth(parent[u])+1;
 }
