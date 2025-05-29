@@ -1,3 +1,4 @@
+//O(NlogM)
 struct Edge {
     int w, to;
 
