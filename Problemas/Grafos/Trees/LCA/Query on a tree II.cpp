@@ -1,5 +1,4 @@
-//https://www.spoj.com/problems/QTREE2/en/
-//https://www.spoj.com/problems/LCA/
+//https://www.spoj.com/problems/QTREE2/en
 #include <bits/stdc++.h>
 #include <ext/pb_ds/tree_policy.hpp>
 #include <ext/pb_ds/assoc_container.hpp>
