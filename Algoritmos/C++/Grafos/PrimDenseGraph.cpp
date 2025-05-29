@@ -1,3 +1,4 @@
+//O(n^2)
 using namespace std;
 #include <bits/stdc++.h>
 #define all(A) A.begin(), A.end()
