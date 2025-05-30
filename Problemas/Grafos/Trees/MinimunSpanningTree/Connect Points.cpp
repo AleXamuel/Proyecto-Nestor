@@ -57,21 +57,19 @@ void solve() {
         d[i] = DBL_MAX;
         pi[i] = -1;
     }
-    double cost = prim();
-    vector<pair<int, int> > ans;
-    For(i, 1, n)
-        ans.emplace_back(i, pi[i]);
     cout.precision(8);
     cout << fixed;
-    cout << cost << ln;
-    cout << ans.size() << ln;
-    for (const auto &e: ans)
-        cout << e.first + 1 << " " << e.second + 1 << ln;
+    cout << prim() << ln;
+    cout << n - 1 << ln;
+    For(i, 1, n)
+        cout << i + 1 << " " << pi[i] + 1 << ln;
 }
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
+    freopen("connect.in", "r", stdin);
+    freopen("connect.out", "w", stdout);
     int t = 1;
     while (t--)
         solve();
