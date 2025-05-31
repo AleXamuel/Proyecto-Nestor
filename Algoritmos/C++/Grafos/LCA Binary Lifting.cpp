@@ -38,15 +38,3 @@ int calc_depth(int u) {
     if(depth[u]>=0)return depth[u];
     return depth[u]=calc_depth(parent[u])+1;
 }
-int getKthAncestor(int node, int k) {
-        if(k>=N||node<0)return -1;
-        int x=0;
-        bool flag=false;
-        while(k>0&&node>=0){
-            if(k&1)
-                node=up[node][x];
-            x++;
-            k>>=1;
-        }
-        return node;
-    }
