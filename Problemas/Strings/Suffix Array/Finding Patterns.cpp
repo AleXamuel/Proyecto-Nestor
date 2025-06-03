@@ -1,11 +1,6 @@
 //https://cses.fi/problemset/task/2102/
 #include <bits/stdc++.h>
-#include <ext/pb_ds/tree_policy.hpp>
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
 using namespace std;
-template<class T>
-using oset = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 #define dll double long
 #define ll long long
 #define Pair pair<int,int>
@@ -69,28 +64,6 @@ vector<int> suffix_array_construction(string s) {
     vector<int> sorted_shifts = sort_cyclic_shifts(s);
     sorted_shifts.erase(sorted_shifts.begin());
     return sorted_shifts;
-}
-vector<int> lcp_construction(string const& s, vector<int> const& p) {
-    int n = s.size();
-    vector<int> rank(n, 0);
-    for (int i = 0; i < n; i++)
-        rank[p[i]] = i;
-
-    int k = 0;
-    vector<int> lcp(n-1, 0);
-    for (int i = 0; i < n; i++) {
-        if (rank[i] == n - 1) {
-            k = 0;
-            continue;
-        }
-        int j = p[rank[i] + 1];
-        while (i + k < n && j + k < n && s[i+k] == s[j+k])
-            k++;
-        lcp[rank[i]] = k;
-        if (k)
-            k--;
-    }
-    return lcp;
 }
 vector<int>p;
 int f(int i,string& s,string& t) {
