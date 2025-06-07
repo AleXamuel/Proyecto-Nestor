@@ -1,13 +1,7 @@
 vector<int>pi, Size;
 int Find(int u) {
-    int aux = u;
-    while (u != pi[u])
-        u = pi[u];
-    while (aux != pi[aux]) {
-        aux = pi[aux];
-        pi[aux] = u;
-    }
-    return u;
+    if (pi[u] == u)return u;
+    return pi[u] = Find(pi[u]);
 }
 
 void Union(int u, int v) {
