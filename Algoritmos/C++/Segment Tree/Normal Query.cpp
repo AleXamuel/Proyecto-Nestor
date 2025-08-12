@@ -4,6 +4,7 @@
 using namespace std;
 #define ll long long
 class ST {
+public:
     vector<int> t;
     int n;
     int combine(int a, int b) {
