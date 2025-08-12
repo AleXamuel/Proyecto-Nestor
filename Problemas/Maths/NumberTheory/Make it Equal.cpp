@@ -11,32 +11,31 @@ using namespace std;
 
 
 void solve() {
-    ll n, k;
+    int n, k;
     cin >> n >> k;
-    vector<ll> A(n);
-    for (ll &i: A)
+    vector<int> A(n);
+    for (int &i: A)
         cin >> i;
-    unordered_map<ll, int> freq;
+    map<int, int> freq;
     For(i, 0, n) {
-        ll x;
+        int x;
         cin >> x;
         freq[x % k]++;
     }
     for (const auto &i: A) {
-        ll a = i % k;
-        ll j = i / k;
-        ll b = k - (i - j * k);
+        int a = i % k;
+        int j = i / k;
+        int b = k - (i - j * k);
         if (freq.find(a) != freq.end() && freq[a] > 0)
             freq[a]--;
         else if (freq.find(b) != freq.end())
             freq[b]--;
     }
-    for (const auto &[k,v]: freq) {
+    for (const auto &[k,v]: freq)
         if (v != 0) {
             cout << "NO" << ln;
             return;
         }
-    }
     cout << "YES" << ln;
 }
 
