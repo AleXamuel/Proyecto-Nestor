@@ -24,8 +24,7 @@ public class Main {
 			int k = n * n - 1;
 			for (int i = n - 1; i >= 0; i--)
 				for (int j = 0; j < n; j++) {
-					BigInteger aux = c.shiftRight(k);
-					if (!aux.and(BigInteger.ONE).equals(BigInteger.ZERO))
+					if (!c.shiftRight(k).and(BigInteger.ONE).equals(BigInteger.ZERO))
 						grid[i][j] = 1;
 					else
 						grid[i][j] = 0;
