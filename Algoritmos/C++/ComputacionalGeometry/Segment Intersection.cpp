@@ -31,3 +31,13 @@ bool inttersect(Point p1, Point q1, Point p2, Point q2) {
     if (o4 == 0 && inSeg(p2, q1, q2)) return true;
     return false;
 }
+//if they touch, they touch in the extreme points?
+bool bound(Point p1, Point q1, Point p2, Point q2) {
+    if (!intersect(p1, q1, p2, q2)) return false;
+    if (inSeg(p2, p1, q2) || inSeg(p2, q1, q2))
+        return true;
+    if (inSeg(p1, p2, q1) || inSeg(p1, q2, q1))
+        return true;
+
+    return false;
+}
