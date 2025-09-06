@@ -1,8 +1,3 @@
-
-#include <iostream>
-#include <algorithm>
-using namespace std;
-#define ll long long
 class ST {
 public:
     vector<int> t;
