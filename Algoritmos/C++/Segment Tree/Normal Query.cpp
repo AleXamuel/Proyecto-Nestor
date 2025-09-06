@@ -3,7 +3,7 @@ public:
     vector<int> t;
     int n;
     int combine(int a, int b) {
-        return max(a,b);
+        return (a+b);
     }
     void buildST(vector<int>& a, int v, int tl, int tr) {
         if (tl == tr) {
@@ -40,6 +40,10 @@ public:
         n = a.size();
         t.resize(4 * n);
         buildST(a, 1, 0, n - 1);
+    }
+    ST(int sz) {
+        n=sz;
+        t.assign(4*n,0);
     }
     int query(int l, int r) {
         return sumST(1, 0, n - 1, l, r);
