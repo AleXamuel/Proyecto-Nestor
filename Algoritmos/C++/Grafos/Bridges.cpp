@@ -1,7 +1,6 @@
 #define Pair pair<int,int>
 #define eb emplace_back
-int n;
-int t;
+int n,t;
 vector<int> d;
 vector<int> low;
 vector<vector<int>> adj;
