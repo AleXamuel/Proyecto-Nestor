@@ -1,11 +1,11 @@
-int n,time; 
+int n,t;
 vector<vector<int>> adj;
 vector<bool> visited;
 vector<int> d, low;
 vector<int> ap;
 void dfs(int v, int p = -1) {
     visited[v] = true;
-    d[v] = low[v] = time++;
+    d[v] = low[v] = t++;
     int children=0;
     for (int to : adj[v]) {
         if (to == p) continue;
@@ -23,7 +23,7 @@ void dfs(int v, int p = -1) {
         ap.push_back(v);
 }
 void find_cutpoints() {
-    time = 0;
+    t = 0;
     visited.assign(n, false);
     d.assign(n, -1);
     low.assign(n, -1);
