@@ -1,9 +1,8 @@
-int n; 
+int n,time; 
 vector<vector<int>> adj;
 vector<bool> visited;
 vector<int> d, low;
 vector<int> ap;
-int time;
 void dfs(int v, int p = -1) {
     visited[v] = true;
     d[v] = low[v] = time++;
