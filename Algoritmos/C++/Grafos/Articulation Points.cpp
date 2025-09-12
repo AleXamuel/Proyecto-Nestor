@@ -2,7 +2,7 @@ int n,t;
 vector<vector<int>> adj;
 vector<bool> visited;
 vector<int> d, low;
-vector<int> ap;
+set<int> ap;
 void dfs(int v, int p = -1) {
     visited[v] = true;
     d[v] = low[v] = t++;
@@ -15,12 +15,12 @@ void dfs(int v, int p = -1) {
             dfs(to, v);
             low[v] = min(low[v], low[to]);
             if (low[to] >= d[v] && p!=-1)
-                ap.push_back(v);
+                ap.insert(v);
             ++children;
         }
     }
     if(p == -1 && children > 1)
-        ap.push_back(v);
+        ap.insert(v);
 }
 void find_cutpoints() {
     t = 0;
