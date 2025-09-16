@@ -7,100 +7,67 @@ using namespace std;
 #define Rfor(i, n, k) for (int i = n; i >= k; i--)
 #define all(v) v.begin(), v.end()
 #define ln "\n"
-#define Pair pair<int,int>
+const int MOD = 1e9 + 7;
+const double PI = acos(-1.0);
+const ll INF = 1e18;
+typedef tuple<ll, ll, ll, int> State;
 
-struct Edge {
-    ll w;
-    int cntSha, cntTit;
-};
+void solve() {
+    ll n, m, s, t;
+    cin >> n >> m >> s >> t;
+    s--, t--;
 
-const int MAX = 101;
-int n;
+    vector<vector<tuple<ll, ll, int>>> adj(n);
+    vector<tuple<ll, ll, ll>> best(n, {INF, INF, INF});
 
-Edge d[MAX];
-bool visited[MAX];
-vector<pair<int, pair<ll, int> > > adj[MAX];
-using Item = pair<int, pair<int, pair<ll, int> > >;
-
-
-void check(int curT, int curS, set<Item> &Q, int i, int j, int u, int v, ll w) {
-    curT += i;
-    curS += j;
-    if (curT <= d[v].cntTit) {
-        if (curT < d[v].cntTit) {
-            d[v].cntTit = curT;
-            d[v].cntSha = curS;
-            d[v].w = d[u].w + w;
-            Q.insert({curT, {curS, {d[u].w + w, v}}});
-        } else if (curS < d[v].cntSha) {
-            d[v].cntSha = curS;
-            d[v].w = d[u].w + w;
-            Q.insert({curT, {curS, {d[u].w + w, v}}});
-        } else if (curS == d[v].cntSha && d[u].w + w < d[v].w) {
-            d[v].w = d[u].w + w;
-            Q.insert({curT, {curS, {d[u].w + w, v}}});
-        }
+    For(i, 0, m) {
+        ll a, b, w, e;
+        cin >> a >> b >> w >> e;
+        a--, b--;
+        adj[a].emplace_back(b, w, e);
+        adj[b].emplace_back(a, w, e);
     }
-}
 
-void dijkstra(int s) {
-    set<Item> Q;
-    Edge inf = {LLONG_MAX, INT_MAX,INT_MAX};
-    fill(d, d + n, inf);
-    fill(visited, visited + n, false);
-    d[s] = {0, 0, 0};
-    Q.insert({0, {0, {0, s}}});
-    while (!Q.empty()) {
-        auto e = Q.begin();
-        int curT = e->first;
-        int curS = e->second.first;
-        int u = e->second.second.second;
-        Q.erase(e);
-        if (visited[u])
-            continue;
-        visited[u] = true;
-        for (const auto &ee: adj[u]) {
-            int v = ee.first;
-            ll w = ee.second.first;
-            int cond = ee.second.second;
-            if (!visited[v]) {
-                if (cond == 2)
-                    check(curT, curS, Q, 1, 0, u, v, w);
-                else if (cond == 1)
-                    check(curT, curS, Q, 0, 1, u, v, w);
-                else
-                    check(curT, curS, Q, 0, 0, u, v, w);
+    priority_queue<State, vector<State>, greater<State>> pq;
+    best[s] = {0, 0, 0};
+    pq.emplace(0, 0, 0, s);
+
+    while (!pq.empty()) {
+        auto [ti, sh, dist, u] = pq.top();
+        pq.pop();
+
+        if (make_tuple(ti, sh, dist) > best[u]) continue;
+
+        for (auto [v, w, e] : adj[u]) {
+            ll nt = ti;
+            ll ns = sh;
+            ll nd = dist + w;
+
+            if (e == 1) ns++;
+            else if (e == 2) nt++;
+
+            auto nState = make_tuple(nt, ns, nd);
+
+            if (nState < best[v]) {
+                best[v] = nState;
+                pq.emplace(nt, ns, nd, v);
             }
         }
     }
-}
 
-void solve() {
-    int m, s, t;
-    cin >> n >> m >> s >> t;
-    s--;
-    t--;
-    For(i, 0, m) {
-        int a, b, c;
-        ll w;
-        cin >> a >> b >> w >> c;
-        a--;
-        b--;
-        adj[a].push_back({b, {w, c}});
-        adj[b].push_back({a, {w, c}});
-    }
-    dijkstra(s);
-    if (!visited[t])
+    auto [tiF, shF, distF] = best[t];
+    if (distF >= INF) {
         cout << "IMPOSSIBLE" << ln;
-    else
-        cout << d[t].w << " " << d[t].cntSha << " " << d[t].cntTit << ln;
+    } else {
+        cout << distF << " " << shF << " " << tiF << ln;
+    }
 }
 
-
-int main() {
+signed main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     int t = 1;
+    //cin >> t;
     while (t--)
         solve();
     return 0;
