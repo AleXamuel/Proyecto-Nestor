@@ -11,3 +11,11 @@ using namespace std;
 #define DBG(x) cerr << #x << " = " << (x) << endl
 #define RAYA cerr << " ============================ " << endl
 
+template<typename T>
+ostream &operator<<(ostream &os, vector<T> A) {
+    os << "[";
+    For(i, 0, A.size()-1)
+        os << A[i] << ", ";
+    os << A.back() << "]";
+    return os;
+}
