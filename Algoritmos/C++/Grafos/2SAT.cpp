@@ -67,33 +67,40 @@ struct TwoSatSolver {
 
 TwoSatSolver solver(x);
 
-══════════════════════════════════════════════════════════════════════════════
-                            PATRONES 2-SAT COMPLETOS
-══════════════════════════════════════════════════════════════════════════════
+//PATRONES 2-SAT COMPLETOS
 
-// A debe ser verdadero → (A ∨ A) → ¬A → A
+// 1. A debe ser verdadero (Forzar A = true)
+// Cláusula: (A ∨ A), equivale a ¬A ⇒ A
 solver.add_disjunction(i, false, i, false);
 
-// A debe ser falso → (¬A ∨ ¬A) → A → ¬A
+// 2. A debe ser falso (Forzar A = false)
+// Cláusula: (¬A ∨ ¬A), equivale a A ⇒ ¬A
 solver.add_disjunction(i, true, i, true);
 
-// Si A entonces B → (¬A ∨ B) → A → B, ¬B → ¬A
+// 3. Si A entonces B (A ⇒ B)
+// Cláusula: (¬A ∨ B), equivale a A ⇒ B, ¬B ⇒ ¬A
 solver.add_disjunction(i, true, j, false);
 
-// Si NO A entonces NO B → (A ∨ ¬B) → ¬A → ¬B, B → A
+// 4. Si no A entonces no B (¬A ⇒ ¬B)
+// Cláusula: (A ∨ ¬B), equivale a ¬A ⇒ ¬B, B ⇒ A
 solver.add_disjunction(i, false, j, true);
 
-// Si no A entonces B (A y B no pueden ser falsos, Al menos uno de A o B verdadero)→ (A ∨ B) → ¬A → B, ¬B → A
+// 5. No ambos falsos (Al menos uno verdadero: A o B)
+// Cláusula: (A ∨ B), equivale a ¬A ⇒ B, ¬B ⇒ A
 solver.add_disjunction(i, false, j, false);
 
-// A y B no pueden ser verdaderos (A implica no B, Al menos uno de A o B falso) → (¬A ∨ ¬B) → A → ¬B, B → ¬A
+// 6. No ambos verdaderos (Al menos uno falso: ¬A o ¬B)
+// Cláusula: (¬A ∨ ¬B), equivale a A ⇒ ¬B, B ⇒ ¬A
 solver.add_disjunction(i, true, j, true);
 
-// A y B deben ser iguales → (A ∨ ¬B) ∧ (¬A ∨ B) → A ↔ B
-solver.add_disjunction(i, false, j, true);   // A ∨ ¬B → B → A
-solver.add_disjunction(i, true, j, false);   // ¬A ∨ B → A → B
+// 7. A y B deben ser iguales (A ↔ B)
+// Cláusulas: (A ∨ ¬B) y (¬A ∨ B), equivale a A ⇒ B y B ⇒ A
+solver.add_disjunction(i, false, j, true);   // (A ∨ ¬B): B ⇒ A
+solver.add_disjunction(i, true, j, false);   // (¬A ∨ B): A ⇒ B
 
-// A y B deben ser diferentes → (A ∨ B) ∧ (¬A ∨ ¬B) → A ⊕ B
-solver.add_disjunction(i, false, j, false);  // A ∨ B → ¬A → B, ¬B → A
-solver.add_disjunction(i, true, j, true);    // ¬A ∨ ¬B → A → ¬B, B → ¬A
+// 8. A y B deben ser diferentes (A ⊕ B)
+// Cláusulas: (A ∨ B) y (¬A ∨ ¬B), equivale a ¬A ⇒ B, ¬B ⇒ A, A ⇒ ¬B, B ⇒ ¬A
+solver.add_disjunction(i, false, j, false);  // (A ∨ B): ¬A ⇒ B, ¬B ⇒ A
+solver.add_disjunction(i, true, j, true);    // (¬A ∨ ¬B): A ⇒ ¬B, B ⇒ ¬A
+
 ══════════════════════════════════════════════════════════════════════════════
