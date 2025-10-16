@@ -1,3 +1,13 @@
+int n;
+vector<int> a (n);
+
+// preprocessing
+int len = (int) sqrt (n + .0) + 1; // size of the block and the number of blocks
+vector<int> b (len);
+for (int i=0; i<n; ++i)
+    b[i / len] += a[i];
+
+//query
 int sum = 0;
 int c_l = l / len,   c_r = r / len;
 if (c_l == c_r)
