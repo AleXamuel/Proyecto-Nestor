@@ -47,7 +47,6 @@ int main() {
         congruences.push_back({(n1 - e) % n1, n1});
         congruences.push_back({(n2 - m) % n2, n2});
         long long x = chinese_remainder_theorem(congruences);
-        if (x == 0) x = n1 * n2;
         cout << "Case " << case_num++ << ": " << x << endl;
     }
     return 0;
