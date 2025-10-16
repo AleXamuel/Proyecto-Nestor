@@ -20,6 +20,20 @@ int query(int v, int tl, int tr, int l, int r, int k) {
     return query(v*2, tl, tm, l, min(r, tm), k) +
            query(v*2+1, tm+1, tr, max(l, tm+1), r, k);
 }
+//modification
+int query(int v, int tl, int tr, int l, int r, int x) {
+    if (l > r)
+        return INF;
+    if (l == tl && r == tr) {
+        vector<int>::iterator pos = lower_bound(t[v].begin(), t[v].end(), x);
+        if (pos != t[v].end())
+            return *pos;
+        return INF;
+    }
+    int tm = (tl + tr) / 2;
+    return min(query(v*2, tl, tm, l, min(r, tm), x), 
+               query(v*2+1, tm+1, tr, max(l, tm+1), r, x));
+}
 void update(int v, int tl, int tr, int pos, int new_val) {
     t[v].erase(t[v].find(a[pos]));
     t[v].insert(new_val);
