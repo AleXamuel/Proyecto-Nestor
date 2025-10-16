@@ -20,3 +20,16 @@ int query(int v, int tl, int tr, int l, int r, int k) {
     return query(v*2, tl, tm, l, min(r, tm), k) +
            query(v*2+1, tm+1, tr, max(l, tm+1), r, k);
 }
+void update(int v, int tl, int tr, int pos, int new_val) {
+    t[v].erase(t[v].find(a[pos]));
+    t[v].insert(new_val);
+    if (tl != tr) {
+        int tm = (tl + tr) / 2;
+        if (pos <= tm)
+            update(v*2, tl, tm, pos, new_val);
+        else
+            update(v*2+1, tm+1, tr, pos, new_val);
+    } else {
+        a[pos] = new_val;
+    }
+}
