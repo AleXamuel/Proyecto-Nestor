@@ -1,30 +1,27 @@
-struct FenwickTree {
-    vector<int> bit;  // binary indexed tree
+struct FenwickTreeMin {
+    vector<int> bit;
     int n;
+    const int INF = (int)1e9;
 
-    FenwickTree(int n) {
+    FenwickTreeMin(int n) {
         this->n = n;
-        bit.assign(n, 0);
+        bit.assign(n, INF);
     }
 
-    FenwickTree(vector<int> const &a) : FenwickTree(a.size()) {
+    FenwickTreeMin(vector<int> a) : FenwickTreeMin(a.size()) {
         for (size_t i = 0; i < a.size(); i++)
-            add(i, a[i]);
+            update(i, a[i]);
     }
 
-    int sum(int r) {
-        int ret = 0;
+    int getmin(int r) {
+        int ret = INF;
         for (; r >= 0; r = (r & (r + 1)) - 1)
-            ret += bit[r];
+            ret = min(ret, bit[r]);
         return ret;
     }
 
-    int sum(int l, int r) {
-        return sum(r) - sum(l - 1);
-    }
-
-    void add(int idx, int delta) {
+    void update(int idx, int val) {
         for (; idx < n; idx = idx | (idx + 1))
-            bit[idx] += delta;
+            bit[idx] = min(bit[idx], val);
     }
 };
