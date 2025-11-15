@@ -1,21 +1,27 @@
+#include <bits/stdc++.h>
 using namespace std;
-#include <iostream>
-#include <vector>
+#define ll long long
+#define ull unsigned ll
+#define For(i, a, b) for (int i = a; i < b; i++)
+#define Rfor(i, n, k) for (int i = n; i >= k; i--)
+#define all(v) (v).begin(), (v).end()
+#define ln "\n"
+#define sz(v) (int)((v).size())
+
 
 vector<int> primos;
 
-vector<int> sieve(int n)
-{
+vector<int> sieve(int n) {
     vector<bool> is_prime(n + 1, true);
     is_prime[0] = is_prime[1] = false;
-    for (int i = 2; i <= n; i++)
-        if (is_prime[i] && (long long)i * i <= n)
-            for (int j = i * i; j <= n; j += i)
-                is_prime[j] = false;
     vector<int> ans;
-    for (int i = 2; i < n + 1; i++)
+    for (int i = 2; i <= n; i++) {
         if (is_prime[i])
             ans.push_back(i);
+        if (is_prime[i] && (ll) i * i <= n)
+            for (int j = i * i; j <= n; j += i)
+                is_prime[j] = false;
+    }
     return ans;
 }
 
@@ -24,7 +30,7 @@ vector<int> decompose(int n)
     vector<int> ans;
     for (int i : primos)
     {
-        if ((long long)i * i > n)
+        if ((ll)i * i > n)
             break;
         while (n % i == 0)
         {
