@@ -36,8 +36,6 @@ vector<int> divs(int n) {
 int f(int n) {
     if (n == 1)
         return 0;
-    if (n <= 0)
-        return 1 << 30;
     if (H.find(n) != H.end())
         return dp[n] = 1;
     if (dp[n] != -1)
