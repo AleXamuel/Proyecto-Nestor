@@ -29,7 +29,7 @@ void solve() {
     double mid = 0;
     For(i, 0, 100) {
         mid = (l + r) / 2;
-        if (f(r) * f(mid) < 0)
+        if (f(r) * f(mid) <= 0)
             l = mid;
         else
             r = mid;
