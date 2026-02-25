@@ -3,8 +3,8 @@
 using namespace std;
 #define ll long long
 #define ull unsigned ll
-#define For(i, a, b) for (ll i = a; i < b; i++)
-#define Rfor(i, n, k) for (ll i = n; i >= k; i--)
+#define For(i, a, b) for (int i = a; i < b; i++)
+#define Rfor(i, n, k) for (int i = n; i >= k; i--)
 #define all(v) (v).begin(), (v).end()
 #define INF(t) numeric_limits<t>::max()
 #define ln "\n"
