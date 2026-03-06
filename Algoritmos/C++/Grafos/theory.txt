@@ -1,5 +1,5 @@
 //Maximum Independent Set/ Minimun vertex cover
-The last missing piece is about finding the actual nodes of the MaxIS. First we solve the MCBM problem and find the set of edges M that form the maximum matching for the graph. 
+The last missing piece is about finding the actual nodes of the MaxIS. First we solve the bipartite matching problem and find the set of edges M that form the maximum matching for the graph. 
 To find the nodes of the MVC we do the following:
 Give orientation to the edges, matched edges start from the right side of the graph to the left side, and free edges start from the left side of the graph to the right side.
 Run DFS from unmatched nodes of the left side, in this traversal some nodes will become visited, others will stay unvisited.
