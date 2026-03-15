@@ -1,4 +1,4 @@
-// this code use hopcroft-karp for a fast matching. That algorithm is also in this Git
+// this code use hopcroft-karp for a fast matching. That algorithm is also in this Git https://github.com/AleXamuel/Proyecto-Nestor/blob/main/Algoritmos/C%2B%2B/Grafos/Matching%20Hopcroft-Karp.cpp
 vector<int> MIS(vector<vector<int> > &adj) {
     N = adj.size();
     vector<int> side(N, -1);
