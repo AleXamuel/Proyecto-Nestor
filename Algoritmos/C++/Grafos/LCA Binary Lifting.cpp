@@ -1,40 +1,44 @@
-int n, l;
-vector<int>parent,depth;
-vector<vector<int>>up;
-void preprocess(int root) {
-    l=ceil(log2(n));
-    up.assign(n,vector<int>(l+1,root));
-    for(int i=0;i<n;i++)
-        up[i][0]=parent[i];
+const int MAXN = 200005;
+const int LOG = 20;
+VI adj[MAXN];
+int parent[MAXN][LOG];
+int depth[MAXN];
+int n, q;
 
-    for(int j=1;j<=l;j++)
-        for(int i=0;i<n;i++)
-            if(up[i][j-1]>=0)
-                up[i][j]=up[up[i][j-1]][j-1];
+void dfs(int u, int p) {
+    parent[u][0] = p;
+    for (int i = 1; i < LOG; i++) {
+        if (parent[u][i - 1] != -1)
+            parent[u][i] = parent[parent[u][i - 1]][i - 1];
+    }
 
-
+    for (int v: adj[u]) {
+        if (v != p) {
+            depth[v] = depth[u] + 1;
+            dfs(v, u);
+        }
+    }
 }
+
 int binaryLifting(int u, int x) {
-    for(int i=0;i<=l;i++)
-        if(x&(1<<i))
-            u=up[u][i];
+    for (int i = 0; i < LOG; i++)
+        if (x & (1 << i)) {
+            if (u == -1) return -1;
+            u = parent[u][i];
+        }
     return u;
 }
+
 int lca(int a, int b) {
-    if(depth[a]<depth[b])
-        swap(a,b);
-    a=binaryLifting(a,depth[a]-depth[b]);
-    if(a==b)return a;
-    for(int i=l;i>=0;i--) {
-        if(up[a][i]==up[b][i])
+    if (depth[a] < depth[b])
+        swap(a, b);
+    a = binaryLifting(a, depth[a] - depth[b]);
+    if (a == b)return a;
+    for (int i = LOG - 1; i >= 0; i--) {
+        if (parent[a][i] == parent[b][i])
             continue;
-        a=up[a][i];
-        b=up[b][i];
+        a = parent[a][i];
+        b = parent[b][i];
     }
-    return up[a][0];
-}
-int calc_depth(int u) {
-    if(parent[u]==-1)return depth[u]=0;
-    if(depth[u]>=0)return depth[u];
-    return depth[u]=calc_depth(parent[u])+1;
+    return parent[a][0];
 }
