@@ -1,38 +1,70 @@
-vector<bool> visited;
-void dfs(int v, vector<vector<int>> const& adj, vector<int> &output) {
-    visited[v] = true;
-    for (auto u : adj[v])
-        if (!visited[u])
-            dfs(u, adj, output);
-    output.push_back(v);
-}
-void strongly_connected_components(vector<vector<int>> const& adj,vector<vector<int>> &components,vector<vector<int>> &adj_cond) {
-    int n = adj.size();
-    components.clear(), adj_cond.clear();
-    vector<int> order;
-    visited.assign(n, false);
-    for (int i = 0; i < n; i++)
-        if (!visited[i])
-            dfs(i, adj, order);
-    vector<vector<int>> adj_rev(n);
-    for (int v = 0; v < n; v++)
-        for (int u : adj[v])
-            adj_rev[u].push_back(v);
-    visited.assign(n, false);
-    reverse(order.begin(), order.end());
-    vector<int> roots(n, 0);
-    for (auto v : order)
-        if (!visited[v]) {
-            std::vector<int> component;
-            dfs(v, adj_rev, component);
-            components.push_back(component);
-            int root = *min_element(begin(component), end(component));
-            for (auto u : component)
-                roots[u] = root;
+struct SCC {
+    int n, cnt;
+    vector<vector<int>> g, rg;
+    vector<int> order, comp_id;
+    vector<vector<int>> comps, dag;
+    vector<bool> vis;
+
+    SCC(int n) : n(n) {
+        g.assign(n, {});
+        rg.assign(n, {});
+    }
+
+    void add_edge(int u, int v) {
+        g[u].push_back(v);
+        rg[v].push_back(u);
+    }
+
+    void dfs1(int u) {
+        vis[u] = true;
+        for (int v : g[u]) {
+            if (!vis[v]) dfs1(v);
         }
-    adj_cond.assign(n, {});
-    for (int v = 0; v < n; v++)
-        for (auto u : adj[v])
-            if (roots[v] != roots[u])
-                adj_cond[roots[v]].push_back(roots[u]);
-}
+        order.push_back(u);
+    }
+
+    void dfs2(int u, int c) {
+        comp_id[u] = c;
+        comps[c].push_back(u);
+        for (int v : rg[u]) {
+            if (comp_id[v] == -1) dfs2(v, c);
+        }
+    }
+
+    void build() {
+        vis.assign(n, false);
+        order.clear();
+
+        for (int i = 0; i < n; i++) {
+            if (!vis[i]) dfs1(i);
+        }
+
+        reverse(order.begin(), order.end());
+
+        comp_id.assign(n, -1);
+        comps.clear();
+        cnt = 0;
+
+        for (int u : order) {
+            if (comp_id[u] == -1) {
+                comps.push_back({});
+                dfs2(u, cnt);
+                cnt++;
+            }
+        }
+
+        dag.assign(cnt, {});
+        for (int u = 0; u < n; u++) {
+            for (int v : g[u]) {
+                int a = comp_id[u];
+                int b = comp_id[v];
+                if (a != b) dag[a].push_back(b);
+            }
+        }
+
+        for (int i = 0; i < cnt; i++) {
+            sort(dag[i].begin(), dag[i].end());
+            dag[i].erase(unique(dag[i].begin(), dag[i].end()), dag[i].end());
+        }
+    }
+};
