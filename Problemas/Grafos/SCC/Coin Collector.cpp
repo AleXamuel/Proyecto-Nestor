@@ -1,112 +1,140 @@
 //https://cses.fi/problemset/task/1686/
 #include <bits/stdc++.h>
 using namespace std;
-#define dll double long
+
 #define ll long long
-#define Pair pair<int,int>
-#define eb emplace_back
-#define pb push_back
-#define all(x) (x).begin(), (x).end()
-#define ln "\n"
-#define mk(x,y) make_pair(x,y)
-#define For(i, a, b) for(int i = a; i < b; i++)
-#define Rfor(i, a, b) for(int i = a; i >= b; i--)
-const int INF = 1e9;
-const int MAX = 1005;
-vector<bool> visited;
+#define ld long double
+#define ull unsigned long long
+#define pq priority_queue<int, vector<int>, greater<int>>
+#define VI vector<int>
+#define VVI vector<VI>
+#define RAD(deg) ((deg) * PI / 180.0)
+#define ones(x) __builtin_popcount(x)
+#define DBG(x) cerr << #x << " = " << (x) << endl
+#define For(i, a, b) for(int i = (a); i < (b); ++i)
+#define Rfor(i, a, b) for(int i = (a); i >= (b); --i)
+#define all(v) (v).begin(), (v).end()
+#define ln '\n'
 
-void dfs(int v, vector<vector<int> > const &adj, vector<int> &output) {
-    visited[v] = true;
-    for (auto u: adj[v])
-        if (!visited[u])
-            dfs(u, adj, output);
-    output.push_back(v);
-}
+struct SCC {
+    int n, cnt;
+    vector<vector<int> > g, rg;
+    vector<int> order, comp_id;
+    vector<vector<int> > comps, dag;
+    vector<bool> vis;
 
-void kosaraju(vector<vector<int> > const &adj, vector<vector<int> > &components,
-              vector<vector<int> > &adj_cond) {
-    int n = adj.size();
-    components.clear(), adj_cond.clear();
-    vector<int> order;
-    visited.assign(n, false);
-    for (int i = 0; i < n; i++)
-        if (!visited[i])
-            dfs(i, adj, order);
-    vector<vector<int> > adj_rev(n);
-    for (int v = 0; v < n; v++)
-        for (int u: adj[v])
-            adj_rev[u].push_back(v);
-    visited.assign(n, false);
-    reverse(order.begin(), order.end());
-    vector<int> roots(n, 0);
-    for (auto v: order)
-        if (!visited[v]) {
-            std::vector<int> component;
-            dfs(v, adj_rev, component);
-            components.push_back(component);
-            int root = *min_element(begin(component), end(component));
-            for (auto u: component)
-                roots[u] = root;
+    SCC(int n) : n(n) {
+        g.assign(n, {});
+        rg.assign(n, {});
+    }
+
+    void add_edge(int u, int v) {
+        g[u].push_back(v);
+        rg[v].push_back(u);
+    }
+
+    void dfs1(int u) {
+        vis[u] = true;
+        for (int v: g[u]) {
+            if (!vis[v]) dfs1(v);
         }
-    adj_cond.assign(n, {});
-    for (int v = 0; v < n; v++)
-        for (auto u: adj[v])
-            if (roots[v] != roots[u])
-                adj_cond[roots[v]].push_back(roots[u]);
+        order.push_back(u);
+    }
+
+    void dfs2(int u, int c) {
+        comp_id[u] = c;
+        comps[c].push_back(u);
+        for (int v: rg[u]) {
+            if (comp_id[v] == -1) dfs2(v, c);
+        }
+    }
+
+    void build() {
+        vis.assign(n, false);
+        order.clear();
+
+        for (int i = 0; i < n; i++) {
+            if (!vis[i]) dfs1(i);
+        }
+
+        reverse(order.begin(), order.end());
+
+        comp_id.assign(n, -1);
+        comps.clear();
+        cnt = 0;
+
+        for (int u: order) {
+            if (comp_id[u] == -1) {
+                comps.push_back({});
+                dfs2(u, cnt);
+                cnt++;
+            }
+        }
+
+        //DAG BUILD
+        dag.assign(cnt, {});
+        for (int u = 0; u < n; u++) {
+            for (int v: g[u]) {
+                int a = comp_id[u];
+                int b = comp_id[v];
+                if (a != b) dag[a].push_back(b);
+            }
+        }
+
+        for (int i = 0; i < cnt; i++) {
+            sort(dag[i].begin(), dag[i].end());
+            dag[i].erase(unique(dag[i].begin(), dag[i].end()), dag[i].end());
+        }
+    }
+};
+
+void solve() {
+    int n, m;
+    cin >> n >> m;
+
+    VI A(n);
+    For(i, 0, n)
+        cin >> A[i];
+
+    SCC scc(n);
+    For(i, 0, m) {
+        int a, b;
+        cin >> a >> b;
+        a--, b--;
+        scc.add_edge(a, b);
+    }
+    scc.build();
+
+    vector<ll> compCoins(scc.cnt, 0);
+    For(u, 0, n)
+        compCoins[scc.comp_id[u]] += A[u];
+
+    vector<ll> dp(scc.cnt, -1);
+    function<ll(int)> dfs = [&](int u) -> ll {
+        if (dp[u] != -1)
+            return dp[u];
+
+        dp[u] = compCoins[u];
+        for (int v: scc.dag[u]) {
+            dp[u] = max(dp[u], dfs(v) + compCoins[u]);
+        }
+        return dp[u];
+    };
+
+    ll ans = 0;
+    For(i, 0, scc.cnt)
+        ans = max(ans, dfs(i));
+
+    cout << ans << ln;
 }
 
 int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int> > adj(n, vector<int>());
-    vector<int> a(n);
-    vector<vector<int> > scc;
-    vector<vector<int> > adj_cond;
-    For(i, 0, n)
-        cin >> a[i];
-    For(i, 0, m) {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        adj[u].pb(v);
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t = 1;
+    //cin >> t;
+    while (t--) {
+        solve();
     }
-    kosaraju(adj, scc, adj_cond);
-    vector<ll> pref(scc.size(), 0);
-    unordered_map<int,int>mp;
-    For(i, 0, scc.size()) {
-        For(j, 0, scc[i].size()) {
-            mp[scc[i][j]]=i;
-            pref[i] += a[scc[i][j]];
-        }
-    }
-    vector<int> inDeg(adj_cond.size(), 0);
-    For(i, 0, adj_cond.size())
-        for (auto v: adj_cond[i])
-            inDeg[v]++;
-    queue<int> q;
-    For(i, 0, inDeg.size())
-        if (inDeg[i] == 0)
-            q.push(i);
-    vector<ll>dp(scc.size());
-    For(i,0,scc.size())
-        dp[i]=pref[i];
-    while(!q.empty()) {
-        int u = q.front();
-        q.pop();
-        for(int v: adj_cond[u]) {
-            if(dp[mp[u]]+pref[mp[v]]>dp[mp[v]]) {
-                dp[mp[v]] = dp[mp[u]]+pref[mp[v]];
-                q.push(v);
-            }
-        }
-    }
-    ll ans=*max_element(dp.begin(), dp.end());
-    cout << ans << endl;
     return 0;
 }
-
-//freopen("socdist.in", "r",stdin);
-//fr    eopen("socdist.out", "w", stdout)
