@@ -1,4 +1,4 @@
-//this implementation works for assignments on ranges and queries with sum on ranges
+//this implementation works for assignments on ranges and queries with sum on ranges you only need to change apply and push methods
 struct LazyST {
     int n;
     vector<long long> st;
