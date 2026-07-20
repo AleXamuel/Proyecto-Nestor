@@ -54,3 +54,14 @@ int query(int a, int b) {
     res = max(res, last_heavy_path_max);
     return res;
 }
+//uodate for lazy propagation, with update in only one place do update(pos[idx],val)
+void update(int l, int r, int x) {
+    for (; head[l] != head[r]; r = parent[head[r]]) {
+        if (depth[head[l]] > depth[head[r]])
+            swap(l, r);
+        segment.update(pos[head[r]], pos[r],x);
+    }
+    if (depth[l] > depth[r])
+        swap(l, r);
+    segment.update(pos[l], pos[r],x);
+}
