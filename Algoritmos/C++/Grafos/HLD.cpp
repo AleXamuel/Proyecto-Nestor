@@ -1,4 +1,3 @@
-
 vector<int> parent, depth, heavy, head, pos;
 int cur_pos;
 
