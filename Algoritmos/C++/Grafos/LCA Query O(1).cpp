@@ -1,4 +1,3 @@
-
 struct LCA {
     int n, LOG;
     vector<vector<int> > adj;
