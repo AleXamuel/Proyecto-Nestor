@@ -1,14 +1,14 @@
 struct node {
-    int val;
+    int val, height;
     node *left, *right;
 
-    node() : val(0), left(nullptr), right(nullptr) {
+    node() : val(0), height(0), left(nullptr), right(nullptr) {
     }
 
-    node(int x) : val(x), left(nullptr), right(nullptr) {
+    node(const int x) : val(x), height(0), left(nullptr), right(nullptr) {
     }
 
-    node(int x, node *left, node *right) : val(x), left(left), right(right) {
+    node(const int x, node *left, node *right) : val(x), height(0), left(left), right(right) {
     }
 };
 
@@ -45,26 +45,71 @@ struct Tree {
         root = add(x, root);
     }
 
-    static node *add(int x, node *subroot) {
+    node *add(int x, node *subroot) {
         if (subroot == nullptr)
             return new node(x);
         if (x < subroot->val)
             subroot->left = add(x, subroot->left);
         else
             subroot->right = add(x, subroot->right);
+        updHeight(subroot);
+        int bal = balance(subroot);
+        if (abs(bal) > 1) {
+            if (bal > 1) {
+                if (balance(subroot->left) < 1)
+                    subroot->left = rotateLeft(subroot->left);
+                subroot = rotateRight(subroot);
+            } else {
+                if (balance(subroot->right) > 0)
+                    subroot->right = rotateRight(subroot->right);
+                subroot = rotateLeft(subroot);
+            }
+        }
         return subroot;
     }
 
-
-    int max() const {
-        return max(root)->val;
+    static node *rotateLeft(node *subroot) {
+        node *aux = subroot->right;
+        subroot->right = aux->left;
+        aux->left = subroot;
+        updHeight(subroot);
+        updHeight(aux);
+        return aux;
     }
 
-    static node *max(node *subroot) {
+    static node *rotateRight(node *subroot) {
+        node *aux = subroot->left;
+        subroot->left = aux->right;
+        aux->right = subroot;
+        updHeight(subroot);
+        updHeight(aux);
+        return aux;
+    }
+
+    static int balance(const node *subroot) {
+        if (subroot == nullptr)
+            return 0;
+        return getHeight(subroot->left) - getHeight(subroot->right);
+    }
+
+    static int getHeight(const node *subroot) {
+        return subroot == nullptr ? -1 : subroot->height;
+    }
+
+    static void updHeight(node *subroot) {
+        subroot->height = max(getHeight(subroot->left), getHeight(subroot->right)) + 1;
+    }
+
+
+    int end() const {
+        return end(root)->val;
+    }
+
+    static node *end(node *subroot) {
         assert(subroot!=nullptr);
         if (subroot->right == nullptr)
             return subroot;
-        return max(subroot->right);
+        return end(subroot->right);
     }
 
     void remove(int x) {
@@ -91,7 +136,7 @@ struct Tree {
                 delete subroot;
                 return aux;
             }
-            node *pred = max(subroot->left);
+            node *pred = end(subroot->left);
             assert(pred!=nullptr);
             subroot->val = pred->val;
             subroot->left = remove(pred->val, subroot->left);
