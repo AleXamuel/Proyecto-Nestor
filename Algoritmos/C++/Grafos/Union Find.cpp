@@ -1,4 +1,4 @@
-vector<int>pi, Size;
+vector<int>pi, sz;
 int Find(int u) {
     if (pi[u] == u)return u;
     return pi[u] = Find(pi[u]);
@@ -9,11 +9,11 @@ void Union(int u, int v) {
     int y = Find(v);
     if (x == y)
         return;
-    if (Size[x] < Size[y]) {
+    if (sz[x] < sz[y]) {
         pi[x] = y;
-        Size[y] += Size[x];
+        sz[y] += sz[x];
     } else {
         pi[y] = x;
-        Size[x] += Size[y];
+        sz[x] += sz[y];
     }
 }
