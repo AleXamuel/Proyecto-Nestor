@@ -20,6 +20,7 @@ struct pt {
 //Permite consultar el valor minimo de todas las funciones para un x especifico en log(n)
 //Se pueden insertar funciones lineales en cualquier orden y hacer consultas en cualquier orden
 //Para usar el LiChaoTree se le pasa el arreglo sobre el cual voy a construir el SegmentTree y hacer las queries
+//El Arreglo que se le pasa a LiChao debe estar ordenado creciente y las queries solo las voy a poder hacer sobre elementos de ese Arreglo
 struct LiChaoTree {
     vector<pt> t;
     vector<ll> A;
