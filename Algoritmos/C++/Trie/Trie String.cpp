@@ -1,40 +1,56 @@
-struct Node {
-    int next[26];
-    int cnt;
+const int K = 26;
 
-    Node() {
-        memset(next, -1, sizeof(next));
-        cnt = 0;
+struct node {
+    int next[K];
+    bool output;
+
+    node() {
+        fill(begin(next), end(next), -1);
+        output = false;
     }
 };
 
-vector<Node> trie(1);
 
-void insertWord(const string &s) {
-    int node = 0;
+struct Trie {
+    vector<node> t;
 
-    for (char c: s) {
-        int x = c - 'a';
+    Trie() {
+        t.assign(1, node());
+    }
 
-        if (trie[node].next[x] == -1) {
-            trie[node].next[x] = trie.size();
-            trie.emplace_back();
+    void insert(const string &word) {
+        int v = 0;
+        for (const auto &c: word) {
+            int pos = c - 'a';
+            if (t[v].next[pos] == -1) {
+                t[v].next[pos] = sz(t);
+                t.push_back(node());
+            }
+            v = t[v].next[pos];
         }
-        node = trie[node].next[x];
-        trie[node].cnt++;
+        t[v].output = true;
     }
-}
 
-int query(const string &s) {
-    int node = 0;
-
-    for (char c: s) {
-        int x = c - 'a';
-
-        if (trie[node].next[x] == -1)
-            return 0;
-
-        node = trie[node].next[x];
+    bool search(const string &word) {
+        int v = 0;
+        for (const auto &c: word) {
+            int pos = c - 'a';
+            if (t[v].next[pos] == -1)
+                return false;
+            v = t[v].next[pos];
+        }
+        return t[v].output;
     }
-    return trie[node].cnt;
-}
+
+    bool startsWith(const string &prefix) {
+        int v = 0;
+        for (const auto &c: prefix) {
+            int pos = c - 'a';
+            if (t[v].next[pos] == -1)
+                return false;
+            v = t[v].next[pos];
+        }
+        return true;
+    }
+
+};
