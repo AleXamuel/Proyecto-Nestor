@@ -1,44 +1,66 @@
-struct Point {
-    double x, y;
-    
-    bool operator==(const Point& other) const {
-        return x == other.x && y == other.y;
+struct pt {
+    ll x, y;
+
+
+    pt operator-(const pt &o) const {
+        return {x - o.x, y - o.y};
     }
-    
-    Point operator-(const Point& other) const {
-        return {x - other.x, y - other.y};
+
+    ll operator^(const pt &o) const {
+        return x * o.y - y * o.x;
     }
 };
 
-int orientation(const Point& a, const Point& b, const Point& c) {
-    double cross = (b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x);
-    return (cross < 0) ? -1 : (cross > 0) ? 1 : 0;
+ostream &operator<<(ostream &os, const pt &o) {
+    return os << "(" << o.x << "," << o.y << ")";
 }
 
-vector<Point> convexHull(vector<Point> points, bool includeCollinear = false) {
-    if (points.size() <= 1) return points;
-    
-    sort(points.begin(), points.end(), [](const Point& a, const Point& b) {
-        return make_pair(a.x, a.y) < make_pair(b.x, b.y);
-    });
-    
-    vector<Point> hull;
-    for (int phase = 0; phase < 2; ++phase) {
-        auto start = hull.size();
-        for (const auto& p : points) {
-            while (hull.size() >= start + 2) {
-                auto a = hull[hull.size()-2];
-                auto b = hull.back();
-                int o = orientation(a, b, p);
-                if (o < 0 || (!includeCollinear && o == 0)) break;
-                hull.pop_back();
-            }
-            hull.push_back(p);
-        }
-        hull.pop_back();
-        reverse(points.begin(), points.end());
+
+ll dist(const pt &a, const pt &b) {
+    return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
+}
+
+vector<pt> convex_hull(vector<pt> A) {
+    pt p0 = {(ll) 1e9, (ll) 1e9};
+    int n = sz(A);
+    For(i, 0, n) {
+        if (A[i].y < p0.y || (A[i].y == p0.y && A[i].x < p0.x))
+            p0 = A[i];
     }
-    
-    if (hull.size() == 2 && hull[0] == hull[1]) hull.pop_back();
+
+    sort(all(A), [&](const pt &a, const pt &b)-> bool {
+        pt u = a - p0;
+        pt v = b - p0;
+        ll c = u ^ v;
+        if (c == 0)
+            return dist(a, p0) < dist(b, p0);
+        return c > 0;
+    });
+    int j = -1;
+    pt v = A[n - 1] - p0;
+    Rfor(i, n-1, 0) {
+        pt u = A[i] - p0;
+        if ((u ^ v) == 0) {
+            j = i;
+        } else
+            break;
+    }
+    reverse(A.begin() + j, A.end());
+    vector<pt> hull;
+    For(i, 0, n) {
+        while (sz(hull) >= 2) {
+            pt c = A[i];
+            pt b = hull.back();
+            pt a = hull[sz(hull) - 2];
+            pt u = b - a;
+            pt v = c - a;
+            ll cross = u ^ v;
+            if (cross < 0)
+                hull.pop_back();
+            else
+                break;
+        }
+        hull.push_back(A[i]);
+    }
     return hull;
 }
