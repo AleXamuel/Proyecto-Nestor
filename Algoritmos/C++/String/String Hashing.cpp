@@ -2,7 +2,7 @@
 // of the prefix [0,i]. Do the operation H[r]-H[l-1]*k^(r-l+1). K is the size of the alphabet
 //do not forget mod properties
 const int nmax = 1e5 + 5;
-ll p[2] = {1200259153, 1202773163}, bs[2][nmax];
+ll p[2] = {1200259153, 1202773163}, bs[2][MAX];
 int base = 27;
 struct shash {
     ll h[2]{0, 0};
