@@ -1,50 +1,59 @@
-struct STP {
-    //segment tree persistent for histograms
+struct STP { // persistent segment tree
     struct node {
-        int x,l,r;
-        node(int a=0,int b=0, int c=0):x(a),l(b),r(c){}
-    };
-    vector<node>st;
-    vector<int>rt;
-    int N,sz;
+        int v, l, r;
+        node(int a = 0, int b = 0, int c = 0) : v(a), l(b), r(c) {}
+    } ;
+    vector <node> st;
+    vector <int> rt;
+    int N, sz;
     STP(int size) {
-        N=size,sz=0;
+        N = size, sz = 0;
         push();
         rt.push_back(0);
     }
-    void push() {
+    inline void push() {
         sz++;
-        st.push_back(node(0,0,0));
+        st.push_back(node(0, 0, 0));
     }
-    void copy(int u,int v) {
-        st[v]=st[u];
+    void copy(int x, int y) {
+        st[y] = st[x];
     }
-    void update(int u, int v, int tl, int tr, int x) {
+    void update(int p, int x, int L, int R, int v) {
         push();
-        copy(u,v);
-        st[v].x++;
-        if(tl==tr)return;
-        int tm=tl+tr>>1;
-        if(x<=tm)
-            update(st[u].l,st[v].l=sz,tl,tm,x);
+        copy(p, x);
+        st[x].v++;
+        if(L == R)return;
+        int m = (L + R) >> 1;
+        if(v <= m)
+            update(st[p].l, st[x].l = sz, L, m, v);
         else
-            update(st[u].r,st[v].r=sz,tm+1,tr,x);
+            update(st[p].r, st[x].r = sz, m + 1, R, v);
     }
-    int query(int u, int v, int tl, int tr, int l, int r) {
-        if(l>tr||r<tl)
-            return 0;
-        if(l<=tl&&tr<=r)
-            return st[v].x-st[u].x;
-        int tm=tl+tr>>1;
-        return query(st[u].l,st[v].l,tl,tm,l,r)+query(st[u].r,st[v].r,tm+1,tr,l,r);
+    int query(int p, int x, int L, int R, int v) {   // freq(v)
+        if(L == R)
+            return st[x].v - st[p].v;
+        int m = (L + R) >> 1;
+        if(v <= m)
+            return query(st[p].l, st[x].l, L, m, v);
+        return query(st[p].r, st[x].r, m + 1, R, v);
     }
-    int query(int u, int v, int l , int r) {
-        return query(rt[u],rt[v],1,N,l,r);
+    int Kth(int p, int x, int L, int R, int kth) {
+        if(L == R)return L;
+        int m = (L + R) >> 1;
+        int izq = st[st[x].l].v - st[st[p].l].v;
+        if(izq >= kth)
+            return Kth(st[p].l, st[x].l, L, m, kth);
+        return Kth(st[p].r, st[x].r, m + 1, R, kth - izq);
     }
-    void add(int x) {
-        int lsz=rt.size();
+    int ask(int pre, int nxt, int v) {
+        return Kth(rt[pre - 1], rt[nxt], 1, N, v);
+    }
+    void add(int v) {
+        int tam = rt.size();
         rt.push_back(sz);
-        update(rt[lsz-1],rt[lsz],1,N,x);
+        update(rt[tam - 1], rt[tam], 1, N, v);
     }
- 
-};
+    inline int size() {
+        return sz;
+    }
+} ;
